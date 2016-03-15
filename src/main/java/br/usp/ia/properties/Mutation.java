@@ -15,4 +15,4 @@ public class Mutation {
     private double energy;
     private String strategy;
 }
-}
+

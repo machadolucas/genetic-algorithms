@@ -1,0 +1,26 @@
+<configuration>
+
+    <appender name="fileAppender" class="ch.qos.logback.core.FileAppender">
+        <File>application.log</File>
+        <encoder>
+            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n</Pattern>
+        </encoder>
+    </appender>
+
+    <appender name="resultsAppender" class="ch.qos.logback.core.FileAppender">
+        <File>result.csv</File>
+        <Append>true</Append>
+        <encoder>
+            <Pattern>%msg %n</Pattern>
+        </encoder>
+    </appender>
+
+    <logger name="results" level="info" additivity="false">
+        <appender-ref ref="resultsAppender"/>
+    </logger>
+
+    <root>
+        <level value="INFO" />
+        <appender-ref ref="fileAppender" />
+    </root>
+</configuration>
