@@ -46,6 +46,14 @@
 			<optional>true</optional>
 		</dependency>
 
+		<!--Gerador de numeros pseudo-aleatorias rapido-->
+		<!-- http://xorshift.di.unimi.it/ -->
+		<dependency>
+			<groupId>it.unimi.dsi</groupId>
+			<artifactId>dsiutils</artifactId>
+			<version>2.3.0</version>
+		</dependency>
+
 	</dependencies>
 	
 	<build>

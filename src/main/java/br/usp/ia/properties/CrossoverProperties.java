@@ -10,14 +10,10 @@ import org.springframework.stereotype.Component;
  */
 @Data
 @Component
-@ConfigurationProperties(prefix = "algorithm.params.population")
-public class Population {
+@ConfigurationProperties(prefix = "algorithm.params.crossover")
+public class CrossoverProperties {
 
-    @Value("${size:10000}")
-    private int size;
-    @Value("${elitism:true}")
-    private boolean elitism;
-    @Value("${perpetuating:true}")
-    private boolean perpetuating;
-
+    @Value("${energy:50}")
+    private double energy;
+    private String strategy;
 }
