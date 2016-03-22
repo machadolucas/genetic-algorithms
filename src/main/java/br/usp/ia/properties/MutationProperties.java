@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Data
 @Component
 @ConfigurationProperties(prefix = "algorithm.params.mutation")
-public class Mutation {
+public class MutationProperties {
 
     @Value("${energy:10}")
     private double energy;
