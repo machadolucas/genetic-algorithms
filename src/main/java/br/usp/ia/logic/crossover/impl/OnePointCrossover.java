@@ -1,13 +1,12 @@
 package br.usp.ia.logic.crossover.impl;
 
-import java.util.LinkedList;
-import java.util.List;
-
+import br.usp.ia.logic.crossover.Crossover;
+import br.usp.ia.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import br.usp.ia.logic.crossover.Crossover;
-import br.usp.ia.util.Random;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by lmachado on 3/22/16.
@@ -19,30 +18,30 @@ public class OnePointCrossover implements Crossover {
     Random random;
 
     @Override
-    public List<Double[]> doCrossover(final Double[] father, final Double[] mother) {
+    public List<String> doCrossover(final String father, final String mother) {
         // Seleciona a posicao de corte aleatoriamente
-        final int cutPosition = random.getUniformGenerator().nextInt(father.length);
+        final int cutPosition = this.random.getUniformGenerator().nextInt(father.length());
 
         // Lista de criancas que serao retornadas
-        final List<Double[]> children = new LinkedList<>();
+        final List<String> children = new LinkedList<>();
 
         //Inicializa filhos
-        final Double[] son1 = new Double[father.length];
-        final Double[] son2 = new Double[father.length];
+        final char[] son1 = new char[father.length()];
+        final char[] son2 = new char[father.length()];
 
         //Preenche filhos ate a posicao de corte
         for (int i = 0; i < cutPosition; i++) {
-            son1[i] = father[i];
-            son2[1] = mother[i];
+            son1[i] = father.charAt(i);
+            son2[i] = mother.charAt(i);
         }
         //Preenche filhos depois da posicao de corte
-        for (int i = cutPosition; i < father.length; i++) {
-            son1[i] = mother[i];
-            son2[1] = father[i];
+        for (int i = cutPosition; i < father.length(); i++) {
+            son1[i] = mother.charAt(i);
+            son2[i] = father.charAt(i);
         }
 
-        children.add(son1);
-        children.add(son2);
+        children.add(new String(son1));
+        children.add(new String(son2));
 
         return children;
     }
