@@ -1,13 +1,12 @@
 package br.usp.ia.logic.selection.impl;
 
-import java.util.LinkedList;
-import java.util.List;
-
+import br.usp.ia.logic.selection.Selection;
+import br.usp.ia.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import br.usp.ia.logic.selection.Selection;
-import br.usp.ia.util.Random;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by lmachado on 3/23/16.
@@ -28,17 +27,14 @@ public class RouletteSelection implements Selection {
      * <p>
      * http://arxiv.org/pdf/1109.3627.pdf
      *
-     * @param population
-     *            Lista com a populacao
-     * @param fitnesses
-     *            Array com os valores de fitness da populacao, na mesma ordem que population
-     * @param selectionsAmount
-     *            Quantidade de selecoes a serem retornadas da populacao
+     * @param population       Lista com os cromossomos da populacao
+     * @param fitnesses        Array com os valores de fitness da populacao, na mesma ordem que population
+     * @param selectionsAmount Quantidade de selecoes a serem retornadas da populacao
      * @return Uma lista com os elementos da população
      */
     @Override
-    public List<Double[]> selectInPopulation(final List<Double[]> population, final Double[] fitnesses,
-            final int selectionsAmount) {
+    public List<String> selectInPopulation(final List<String> population, final Double[] fitnesses, final int
+            selectionsAmount) {
 
         // Obtem o valor maximo de fitness da populacao
         Double maxFitness = 0d;
@@ -51,11 +47,13 @@ public class RouletteSelection implements Selection {
         // Cada posicao desse array guarda quantas vezes cada individuo foi selecionado
         final int[] selections = new int[fitnesses.length];
 
-        // algoritmo de aceitacao estocastica para selecionar inidividuos
+        // Algoritmo de aceitacao estocastica para selecionar inidividuos
         int index = 0;
         for (int i = 0; i < selectionsAmount; i++) {
+            //Para cada um dos individuos que precisam ser selecionados, calcula quem sera o escolhido
             boolean accepted = false;
             while (!accepted) {
+                //Ate escolher alguem, calcula aleatoriamente pelo fitness/maxFitness
                 index = this.random.getUniformGenerator().nextInt(fitnesses.length);
                 if (this.random.getUniformGenerator().nextDouble() < fitnesses[index] / maxFitness) {
                     accepted = true;
@@ -66,9 +64,9 @@ public class RouletteSelection implements Selection {
         }
 
         // Inicializa lista da populacao selecionada
-        final List<Double[]> resultingPopulation = new LinkedList<>();
+        final List<String> resultingPopulation = new LinkedList<>();
 
-        // Preenche lista da populacao selecionada com individuos
+        // Preenche lista da populacao selecionada com individuos selecionados
         for (final int person : selections) {
             for (int selectionCount = 0; selectionCount < selections[person]; selectionCount++) {
                 resultingPopulation.add(population.get(selections[person]));

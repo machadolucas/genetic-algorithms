@@ -9,6 +9,6 @@ import java.util.List;
  */
 public interface Crossover {
 
-    List<Double[]> doCrossover(Double[] father, Double[] mother);
+    List<String> doCrossover(String father, String mother);
 
 }
