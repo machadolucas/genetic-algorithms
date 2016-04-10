@@ -5,9 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-/**
- * Created by richardcsantana on 15/03/16.
- */
 @Component
 @Slf4j(topic = "resultsConsole")
 public class CVSConsoleLogging implements Logging {

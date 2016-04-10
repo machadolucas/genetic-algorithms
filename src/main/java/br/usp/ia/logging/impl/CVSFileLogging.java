@@ -4,9 +4,6 @@ import br.usp.ia.logging.Logging;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-/**
- * Created by richardcsantana on 15/03/16.
- */
 @Component
 @Slf4j(topic = "resultsFile")
 public class CVSFileLogging implements Logging {
