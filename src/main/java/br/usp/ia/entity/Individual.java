@@ -3,8 +3,6 @@ package br.usp.ia.entity;
 import br.usp.ia.logic.GAAlgorithm;
 import br.usp.ia.logic.fitness.FitnessFunction;
 
-import java.math.BigInteger;
-
 public class Individual {
 
     private final byte[] chromosome;
@@ -65,48 +63,29 @@ public class Individual {
     /**
      * @return a representacao do valor X no cromossomo como valor decimal
      */
-    public double getXDoubleRepresentation() {
-        return Double.longBitsToDouble(new BigInteger(toString().substring(0, 64), 2).longValue());
+    public double getXDoubleRepresentation(final FitnessFunction fitnessFunction) {
+        //Obtem o valor inteiro a partir da representacao binaria
+        final int variableIntegerValue = Integer.parseInt(toString().substring( //
+                0, fitnessFunction.getXLength()), 2);
+
+        //Utiliza a funcao segundo Linden (2012) para converter um inteiro em decimal
+        return fitnessFunction.getLowerLimit() + variableIntegerValue * //
+                (fitnessFunction.getUpperLimit() - fitnessFunction.getLowerLimit()) / //
+                (Math.pow(2, fitnessFunction.getXLength()) - 1);
     }
 
     /**
      * @return a representacao do valor Y no cromossomo como valor decimal
      */
-    public double getYDoubleRepresentation() {
-        return Double.longBitsToDouble(new BigInteger(toString().substring(64), 2).longValue());
-    }
+    public double getYDoubleRepresentation(final FitnessFunction fitnessFunction) {
+        //Obtem o valor inteiro a partir da representacao binaria de Y
+        final int variableIntegerValue = Integer.parseInt(toString().substring( //
+                fitnessFunction.getXLength(), fitnessFunction.getXLength() + fitnessFunction.getYLength()), 2);
 
-    /**
-     * Coloca a representacao do cromossomo como valor decimal no formato binario
-     */
-    public void setWithDoubleRepresentation(final double x, final double y) {
-        String xBinaryRepresentation = Long.toBinaryString(Double.doubleToRawLongBits(x));
-        if (x >= 0) {
-            //Se for numero positivo, o primeiro digito binario eh omitido por ser zero.
-            //Aqui adicionamos pra representacao sempre ter comprimento de 64 caracteres.
-            xBinaryRepresentation = "0" + xBinaryRepresentation;
-        }
-        for (int i = 0; i < xBinaryRepresentation.length(); i++) {
-            if (xBinaryRepresentation.charAt(i) == '0') {
-                setGene(i, (byte) 0);
-            } else {
-                setGene(i, (byte) 1);
-            }
-        }
-
-        String yBinaryRepresentation = Long.toBinaryString(Double.doubleToRawLongBits(y));
-        if (y >= 0) {
-            //Se for numero positivo, o primeiro digito binario eh omitido por ser zero.
-            //Aqui adicionamos pra representacao sempre ter comprimento de 64 caracteres.
-            yBinaryRepresentation = "0" + yBinaryRepresentation;
-        }
-        for (int i = 64; i < yBinaryRepresentation.length(); i++) {
-            if (yBinaryRepresentation.charAt(i - 64) == '0') {
-                setGene(i, (byte) 0);
-            } else {
-                setGene(i, (byte) 1);
-            }
-        }
+        //Utiliza a funcao segundo Linden (2012) para converter um inteiro em decimal
+        return fitnessFunction.getLowerLimit() + variableIntegerValue * //
+                (fitnessFunction.getUpperLimit() - fitnessFunction.getLowerLimit()) / //
+                (Math.pow(2, fitnessFunction.getYLength()) - 1);
     }
 
 }
