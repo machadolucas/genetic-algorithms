@@ -1,7 +1,6 @@
 package br.usp.ia.logic.crossover.impl;
 
 import br.usp.ia.entity.Individual;
-import br.usp.ia.logic.GAAlgorithm;
 import br.usp.ia.logic.crossover.Crossover;
 import br.usp.ia.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +19,11 @@ public class UniformCrossover implements Crossover {
     public List<Individual> doCrossover(final Individual father, final Individual mother) {
 
         //Inicializa cromossomo dos filhos
-        final byte[] son1 = new byte[GAAlgorithm.chromosomeLength];
-        final byte[] son2 = new byte[GAAlgorithm.chromosomeLength];
+        final byte[] son1 = new byte[father.getChromosomeLength()];
+        final byte[] son2 = new byte[father.getChromosomeLength()];
 
         // Preenche filhos
-        for (int i = 0; i < GAAlgorithm.chromosomeLength; i++) {
+        for (int i = 0; i < father.getChromosomeLength(); i++) {
             // Seleciona para cada gene, de qual dos pais sera herdado com prob de 50%
             final boolean firstSonFromFather = this.random.getUniformGenerator().nextBoolean();
             if (firstSonFromFather) {

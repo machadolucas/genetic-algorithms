@@ -1,7 +1,6 @@
 package br.usp.ia.logic.crossover.impl;
 
 import br.usp.ia.entity.Individual;
-import br.usp.ia.logic.GAAlgorithm;
 import br.usp.ia.logic.crossover.Crossover;
 import br.usp.ia.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +18,11 @@ public class OnePointCrossover implements Crossover {
     @Override
     public List<Individual> doCrossover(final Individual father, final Individual mother) {
         // Seleciona a posicao de corte aleatoriamente
-        final int cutPosition = this.random.getUniformGenerator().nextInt(GAAlgorithm.chromosomeLength);
+        final int cutPosition = this.random.getUniformGenerator().nextInt(father.getChromosomeLength());
 
         //Inicializa cromossomo dos filhos
-        final byte[] son1 = new byte[GAAlgorithm.chromosomeLength];
-        final byte[] son2 = new byte[GAAlgorithm.chromosomeLength];
+        final byte[] son1 = new byte[father.getChromosomeLength()];
+        final byte[] son2 = new byte[father.getChromosomeLength()];
 
         //Preenche filhos ate a posicao de corte
         for (int i = 0; i < cutPosition; i++) {
@@ -31,7 +30,7 @@ public class OnePointCrossover implements Crossover {
             son2[i] = mother.getGene(i);
         }
         //Preenche filhos depois da posicao de corte
-        for (int i = cutPosition; i < GAAlgorithm.chromosomeLength; i++) {
+        for (int i = cutPosition; i < father.getChromosomeLength(); i++) {
             son1[i] = mother.getGene(i);
             son2[i] = father.getGene(i);
         }
