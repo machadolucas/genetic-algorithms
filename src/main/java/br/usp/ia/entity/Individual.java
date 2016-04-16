@@ -1,6 +1,5 @@
 package br.usp.ia.entity;
 
-import br.usp.ia.logic.GAAlgorithm;
 import br.usp.ia.logic.fitness.FitnessFunction;
 
 public class Individual {
@@ -49,12 +48,18 @@ public class Individual {
     }
 
     /**
+     * @return comprimento do cromossomo
+     */
+    public int getChromosomeLength() {
+        return this.chromosome.length;
+    }
+
+    /**
      * @return a representacao binaria do cromossomo
      */
-    @Override
-    public String toString() {
+    public String toString(final FitnessFunction fitnessFunction) {
         final StringBuilder chromosome = new StringBuilder();
-        for (int i = 0; i < GAAlgorithm.chromosomeLength; i++) {
+        for (int i = 0; i < fitnessFunction.getChromosomeLength(); i++) {
             chromosome.append(getGene(i));
         }
         return chromosome.toString();
@@ -65,7 +70,7 @@ public class Individual {
      */
     public double getXDoubleRepresentation(final FitnessFunction fitnessFunction) {
         //Obtem o valor inteiro a partir da representacao binaria
-        final int variableIntegerValue = Integer.parseInt(toString().substring( //
+        final int variableIntegerValue = Integer.parseInt(toString(fitnessFunction).substring( //
                 0, fitnessFunction.getXLength()), 2);
 
         //Utiliza a funcao segundo Linden (2012) para converter um inteiro em decimal
@@ -79,7 +84,7 @@ public class Individual {
      */
     public double getYDoubleRepresentation(final FitnessFunction fitnessFunction) {
         //Obtem o valor inteiro a partir da representacao binaria de Y
-        final int variableIntegerValue = Integer.parseInt(toString().substring( //
+        final int variableIntegerValue = Integer.parseInt(toString(fitnessFunction).substring( //
                 fitnessFunction.getXLength(), fitnessFunction.getXLength() + fitnessFunction.getYLength()), 2);
 
         //Utiliza a funcao segundo Linden (2012) para converter um inteiro em decimal

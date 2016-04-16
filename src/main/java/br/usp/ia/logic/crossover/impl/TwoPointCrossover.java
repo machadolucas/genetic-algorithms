@@ -1,7 +1,6 @@
 package br.usp.ia.logic.crossover.impl;
 
 import br.usp.ia.entity.Individual;
-import br.usp.ia.logic.GAAlgorithm;
 import br.usp.ia.logic.crossover.Crossover;
 import br.usp.ia.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +19,14 @@ public class TwoPointCrossover implements Crossover {
     public List<Individual> doCrossover(final Individual father, final Individual mother) {
         // Seleciona a posicao de corte aleatoriamente
         // O primeiro corte ocorre entre 0 e o tamanho total do cromossomo
-        final int firstCutPosition = this.random.getUniformGenerator().nextInt(GAAlgorithm.chromosomeLength);
+        final int firstCutPosition = this.random.getUniformGenerator().nextInt(father.getChromosomeLength());
         // O segundo ocorre entre firstCutPosition e o tamanho total do cromossomo
-        final int secondCutPosition = this.random.getUniformGenerator().nextInt(GAAlgorithm.chromosomeLength -
+        final int secondCutPosition = this.random.getUniformGenerator().nextInt(father.getChromosomeLength() -
                 firstCutPosition) + firstCutPosition;
 
         //Inicializa cromossomo dos filhos
-        final byte[] son1 = new byte[GAAlgorithm.chromosomeLength];
-        final byte[] son2 = new byte[GAAlgorithm.chromosomeLength];
+        final byte[] son1 = new byte[father.getChromosomeLength()];
+        final byte[] son2 = new byte[father.getChromosomeLength()];
 
         // Preenche filhos ate a primeira posicao de corte
         for (int i = 0; i < firstCutPosition; i++) {
@@ -40,7 +39,7 @@ public class TwoPointCrossover implements Crossover {
             son2[i] = father.getGene(i);
         }
         // Preenche filhos depois da segunda posicao de corte
-        for (int i = secondCutPosition; i < GAAlgorithm.chromosomeLength; i++) {
+        for (int i = secondCutPosition; i < father.getChromosomeLength(); i++) {
             son1[i] = father.getGene(i);
             son2[i] = mother.getGene(i);
         }
