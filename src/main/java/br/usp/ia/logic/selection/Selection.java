@@ -1,12 +1,13 @@
 package br.usp.ia.logic.selection;
 
+import br.usp.ia.entity.Individual;
+import br.usp.ia.logic.fitness.FitnessFunction;
+
 import java.util.List;
 
-/**
- * Created by lmachado on 3/22/16.
- */
 public interface Selection {
 
-    List<String> selectInPopulation(List<String> population, Double[] fitnesses, int selectionsNumber);
+    List<Individual> selectInPopulation(List<Individual> population, int selectionsNumber, FitnessFunction
+            fitnessFunction);
 
 }

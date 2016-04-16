@@ -1,5 +1,7 @@
 package br.usp.ia.logic.crossover.impl;
 
+import br.usp.ia.entity.Individual;
+import br.usp.ia.logic.GAAlgorithm;
 import br.usp.ia.logic.crossover.Crossover;
 import br.usp.ia.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,49 +10,45 @@ import org.springframework.stereotype.Component;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by lmachado on 3/22/16.
- */
 @Component
 public class TwoPointCrossover implements Crossover {
 
     @Autowired
-    Random random;
+    private Random random;
 
     @Override
-    public List<String> doCrossover(final String father, final String mother) {
+    public List<Individual> doCrossover(final Individual father, final Individual mother) {
         // Seleciona a posicao de corte aleatoriamente
         // O primeiro corte ocorre entre 0 e o tamanho total do cromossomo
-        final int firstCutPosition = this.random.getUniformGenerator().nextInt(father.length());
+        final int firstCutPosition = this.random.getUniformGenerator().nextInt(GAAlgorithm.chromosomeLength);
         // O segundo ocorre entre firstCutPosition e o tamanho total do cromossomo
-        final int secondCutPosition = this.random.getUniformGenerator().nextInt(father.length() - firstCutPosition) +
-                firstCutPosition;
+        final int secondCutPosition = this.random.getUniformGenerator().nextInt(GAAlgorithm.chromosomeLength -
+                firstCutPosition) + firstCutPosition;
 
-        // Lista de criancas que serao retornadas
-        final List<String> children = new LinkedList<>();
-
-        // Inicializa filhos
-        final char[] son1 = new char[father.length()];
-        final char[] son2 = new char[father.length()];
+        //Inicializa cromossomo dos filhos
+        final byte[] son1 = new byte[GAAlgorithm.chromosomeLength];
+        final byte[] son2 = new byte[GAAlgorithm.chromosomeLength];
 
         // Preenche filhos ate a primeira posicao de corte
         for (int i = 0; i < firstCutPosition; i++) {
-            son1[i] = father.charAt(i);
-            son2[i] = mother.charAt(i);
+            son1[i] = father.getGene(i);
+            son2[i] = mother.getGene(i);
         }
         // Preenche filhos da primeira ate a segunda posicao de corte
         for (int i = firstCutPosition; i < secondCutPosition; i++) {
-            son1[i] = mother.charAt(i);
-            son2[i] = father.charAt(i);
+            son1[i] = mother.getGene(i);
+            son2[i] = father.getGene(i);
         }
         // Preenche filhos depois da segunda posicao de corte
-        for (int i = secondCutPosition; i < father.length(); i++) {
-            son1[i] = father.charAt(i);
-            son2[i] = mother.charAt(i);
+        for (int i = secondCutPosition; i < GAAlgorithm.chromosomeLength; i++) {
+            son1[i] = father.getGene(i);
+            son2[i] = mother.getGene(i);
         }
 
-        children.add(new String(son1));
-        children.add(new String(son2));
+        // Lista de criancas que serao retornadas
+        final List<Individual> children = new LinkedList<>();
+        children.add(new Individual(son1));
+        children.add(new Individual(son2));
 
         return children;
     }

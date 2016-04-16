@@ -6,9 +6,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-/**
- * Created by richardcsantana on 15/03/16.
- */
 @Component
 public class CVSLogging {
 
