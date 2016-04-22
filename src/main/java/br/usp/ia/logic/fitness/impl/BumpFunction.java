@@ -11,11 +11,15 @@ public class BumpFunction implements FitnessFunction {
     public double calculate(final Individual individual) {
         //Obtem os valores decimais a partir da representacao binaria
         final double x = individual.getXDoubleRepresentation(this);
-        final double y = individual.getXDoubleRepresentation(this);
+        final double y = individual.getYDoubleRepresentation(this);
 
-        //TODO
+        final double temp0 = Math.pow(Math.cos(x), 4) + Math.pow(Math.cos(y), 4);
+        final double temp1 = 2 * Math.pow(Math.cos(x), 2) * Math.pow(Math.cos(y), 2);
+        final double temp2 = Math.sqrt(Math.pow(x, 2) + 2 * Math.pow(y, 2));
+        final double z = Math.abs((temp0 - temp1) / temp2);
+        final double result = -z;
 
-        return 0;
+        return result;
     }
 
     @Override
