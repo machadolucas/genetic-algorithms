@@ -18,7 +18,10 @@ public class RastriginFunction implements FitnessFunction {
         final double zx = Math.pow(x, 2.0) - 10.0 * Math.cos(2 * Math.PI * x);
         final double zy = Math.pow(y, 2.0) - 10.0 * Math.cos(2 * Math.PI * y);
 
-        return zx + zy; //TODO: Retornar -(zx + zy)? Pois eh maximizacao
+        final double z = zx + zy;
+
+        //Soma uma constante para garantir que o valor fitness seja sempre positivo
+        return -z + 80.001;
     }
 
     @Override

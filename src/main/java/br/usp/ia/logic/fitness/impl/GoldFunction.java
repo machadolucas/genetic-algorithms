@@ -20,7 +20,9 @@ public class GoldFunction implements FitnessFunction {
         final double b = 30 + Math.pow((2 * x - 3 * y), 2) * //
                 (18 - 32 * x + 12 * Math.pow(x, 2) + 48 * y - 36 * x * y + 27 * Math.pow(y, 2));
         final double z = a * b;
-        return -z;
+        
+        // Retorna -z para inverter a funcao para maximizacao, e soma uma constante para garantir que eh maior que zero
+        return -z + 0.001;
     }
 
     @Override
@@ -32,7 +34,7 @@ public class GoldFunction implements FitnessFunction {
     @Override
     //Limite superior do intervalo para minimizacao
     public double getUpperLimit() {
-        return -2;
+        return 2;
     }
 
     @Override

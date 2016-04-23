@@ -69,12 +69,27 @@ public class GAAlgorithm {
                 .fitnessFunction);
 
         int generationCount = 0;
-        //TODO Controlar a parada do while pelo numero de geracoes ou por proximidade da resposta final
-        while (population.getBest(this.fitnessFunction).getFitness(this.fitnessFunction) < 100 //
-                && generationCount < 1000) {
+
+
+        while (true) {
             generationCount++;
             this.logging.fitnessProgress(population, this.fitnessFunction);
             population = evolveGeneration(population);
+
+            //Criterio de parada do algoritmo:
+            if (this.executionProperties.getStopStrategy().equals(ExecutionProperties.StopStrategy
+                    .NUMBER_OF_GENERATIONS)) {
+                //Se for pelo numero de geracoes
+                if (generationCount >= this.executionProperties.getMaxNumberOfGenerations()) {
+                    break;
+                }
+            } else {
+                //Se for por convergencia
+                //TODO Controlar a parada do while pela proximidade da resposta final
+                if (population.getBest(this.fitnessFunction).getFitness(this.fitnessFunction) < 100) {
+                    break;
+                }
+            }
         }
 
     }
@@ -89,28 +104,65 @@ public class GAAlgorithm {
 
         final Population newGeneration = new Population(new LinkedList<>());
 
+        int individualsToSelect = currentPopulation.size();
+
         //Se tiver elitismo, mantem o melhor individuo da geracao anterior na nova
-        if (this.executionProperties.isElitism()) {
+        if (this.selectionProperties.isElitism()) {
             newGeneration.getIndividuals().add(currentPopulation.getBest(this.fitnessFunction));
+            individualsToSelect--;
         }
 
-        while (newGeneration.size() < currentPopulation.size()) {
-            //Seleciona os pais para gerar novos cromossomos
+        //Vai gerar novos individuos ate encher a populacao da nova geracao
+        while (newGeneration.size() < individualsToSelect) {
+
+            //Seleciona os individuos que gerarao a proxima geracao
             final List<Individual> selectedParents = //
                     this.selection.selectInPopulation(currentPopulation, 2, this.fitnessFunction);
 
-            //Aplica operador de crossover
-            final List<Individual> children = //
-                    this.crossover.doCrossover(selectedParents.get(0), selectedParents.get(1));
+            //Calcula probabilidade de crossover
+            if (this.random.getUniformGenerator().nextDouble() <= this.crossoverProperties.getEnergy()) {
 
-            newGeneration.getIndividuals().add(children.get(0));
+                //Aplica operador de crossover entre pares de selectedParents, criando children
+                final List<Individual> children = this.crossover.doCrossover( //
+                        selectedParents.get(0), selectedParents.get(1));
+
+                //Escolhe aleatoriamente um dos filhos para adicionar na nova geracao
+                final int choosenChildren = this.random.getUniformGenerator().nextInt(2);
+                newGeneration.getIndividuals().add(children.get(choosenChildren));
+
+            } else {
+
+                //Se nao atingiu a probabilidade de crossover, faz reproducao (clone)
+                //Escolhe aleatoriamente um dos filhos para adicionar na nova geracao
+                final int choosenChildren = this.random.getUniformGenerator().nextInt(2);
+                newGeneration.getIndividuals().add(selectedParents.get(choosenChildren));
+            }
+
         }
 
-        //Aplica operador de mutacao a toda a nova geracao
+        //Aplica operador de mutacao em toda a nova geracao
         newGeneration.getIndividuals().forEach( //
                 individual -> this.mutation.mutate(individual, this.mutationProperties.getEnergy()));
 
-        return newGeneration;
+        //Faz a troca da populacao de acordo com o criterio
+        switch (this.executionProperties.getPopulationChangeStrategy()) {
+            case MU_PLUS_LAMBDA:
+                //Faz a troca pela estrategia Mu+Lambda, selecionando os melhores individuos entre todos da
+                // populacao atual e da nova
+                final Population parentsAndChildren = new Population(new LinkedList<>());
+                parentsAndChildren.getIndividuals().addAll(currentPopulation.getIndividuals());
+                parentsAndChildren.getIndividuals().addAll(newGeneration.getIndividuals());
+
+                parentsAndChildren.getIndividuals().retainAll(this.selection.selectInPopulation(parentsAndChildren,
+                        newGeneration.size(), this.fitnessFunction));
+
+                return parentsAndChildren;
+            case COMPLETE_REPLACEMENT:
+            default:
+                //Faz a troca por substituicao completa da geracao atual pela nova
+                return newGeneration;
+        }
+
     }
 
 

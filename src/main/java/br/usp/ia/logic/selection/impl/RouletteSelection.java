@@ -50,8 +50,9 @@ public class RouletteSelection implements Selection {
             while (!accepted) {
                 //Ate escolher alguem, calcula aleatoriamente pelo fitness/maxFitness
                 index = this.random.getUniformGenerator().nextInt(population.size());
+                final double fitness = population.getIndividuals().get(index).getFitness(fitnessFunction);
                 if (this.random.getUniformGenerator().nextDouble() < //
-                        population.getIndividuals().get(index).getFitness(fitnessFunction) / maxFitness) {
+                        fitness / maxFitness) {
                     accepted = true;
                 }
             }

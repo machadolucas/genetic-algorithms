@@ -19,7 +19,9 @@ public class BumpFunction implements FitnessFunction {
         final double temp1 = 2 * Math.pow(Math.cos(x), 2) * Math.pow(Math.cos(y), 2);
         final double temp2 = Math.sqrt(Math.pow(x, 2) + 2 * Math.pow(y, 2));
         final double z = Math.abs((temp0 - temp1) / temp2);
-        return -z;
+
+        // Retorna z para inverter a funcao para maximizacao, e soma uma constante para garantir que eh maior que zero
+        return z + 0.001;
     }
 
     @Override

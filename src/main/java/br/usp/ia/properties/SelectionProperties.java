@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "algorithm.params.selection")
 public class SelectionProperties {
 
-    @Value("${energy:1}")
-    private double energy;
+    @Value("${elitism:true}")
+    private boolean elitism;
     private SelectionStrategy strategy;
 
     @AllArgsConstructor
