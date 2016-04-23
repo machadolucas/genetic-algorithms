@@ -11,8 +11,9 @@ public class CVSFileLogging implements Logging {
     private int counter = 0;
 
     @Override
-    public void fitnessProgress(final int populationSize, final double populationAvg, final double max, final double min) {
-        log.info("{}, {}, {}, {}, {}", this.counter, populationSize, populationAvg, max, min);
+    public void fitnessProgress(final double populationTotal, final double populationAvg, final double max, final
+    double min) {
+        log.info("{},{},{},{},{}", this.counter, populationTotal, populationAvg, max, min);
         this.counter++;
     }
 }

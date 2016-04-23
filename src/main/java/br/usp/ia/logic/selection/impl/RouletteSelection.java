@@ -1,13 +1,13 @@
 package br.usp.ia.logic.selection.impl;
 
 import br.usp.ia.entity.Individual;
+import br.usp.ia.entity.Population;
 import br.usp.ia.logic.fitness.FitnessFunction;
 import br.usp.ia.logic.selection.Selection;
 import br.usp.ia.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,14 +33,11 @@ public class RouletteSelection implements Selection {
      * @return Uma lista com os individuos selecionados da população
      */
     @Override
-    public List<Individual> selectInPopulation(final List<Individual> population, final int selectionsAmount, final
+    public List<Individual> selectInPopulation(final Population population, final int selectionsAmount, final
     FitnessFunction fitnessFunction) {
 
         // Obtem o valor maximo de fitness da populacao
-        final Comparator<Individual> comp = (p1, p2) -> Double.compare(p1.getFitness(fitnessFunction), p2.getFitness
-                (fitnessFunction));
-        final Individual fittest = population.stream().max(comp).get();
-        final double maxFitness = fittest.getFitness(fitnessFunction);
+        final double maxFitness = population.getBest(fitnessFunction).getFitness(fitnessFunction);
 
         // Cada posicao desse array guarda quantas vezes cada individuo foi selecionado
         final int[] selections = new int[population.size()];
@@ -54,7 +51,7 @@ public class RouletteSelection implements Selection {
                 //Ate escolher alguem, calcula aleatoriamente pelo fitness/maxFitness
                 index = this.random.getUniformGenerator().nextInt(population.size());
                 if (this.random.getUniformGenerator().nextDouble() < //
-                        population.get(index).getFitness(fitnessFunction) / maxFitness) {
+                        population.getIndividuals().get(index).getFitness(fitnessFunction) / maxFitness) {
                     accepted = true;
                 }
             }
@@ -68,7 +65,7 @@ public class RouletteSelection implements Selection {
         // Preenche lista da populacao selecionada com individuos selecionados
         for (final int person : selections) {
             for (int selectionCount = 0; selectionCount < selections[person]; selectionCount++) {
-                resultingPopulation.add(population.get(selections[person]));
+                resultingPopulation.add(population.getIndividuals().get(selections[person]));
             }
         }
 

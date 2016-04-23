@@ -1,5 +1,5 @@
 package br.usp.ia.logging;
 
 public interface Logging {
-    void fitnessProgress(int populationSize, double populationAvg, double max, double min);
+    void fitnessProgress(double populationTotal, double populationAvg, double max, double min);
 }

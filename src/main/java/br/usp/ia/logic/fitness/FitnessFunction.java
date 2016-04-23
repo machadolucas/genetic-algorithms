@@ -1,6 +1,7 @@
 package br.usp.ia.logic.fitness;
 
 import br.usp.ia.entity.Individual;
+import br.usp.ia.entity.Population;
 
 public interface FitnessFunction {
 
@@ -22,4 +23,5 @@ public interface FitnessFunction {
         return 10;
     }
 
+    Individual getTheBestIndividual(Population population);
 }

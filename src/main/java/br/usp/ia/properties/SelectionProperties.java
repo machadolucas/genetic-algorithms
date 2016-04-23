@@ -10,19 +10,20 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-@ConfigurationProperties(prefix = "algorithm.params.crossover")
-public class CrossoverProperties {
+@ConfigurationProperties(prefix = "algorithm.params.selection")
+public class SelectionProperties {
 
-    @Value("${energy:0.8}")
+    @Value("${energy:1}")
     private double energy;
-    private CrossoverStrategy strategy;
+    private SelectionStrategy strategy;
 
     @AllArgsConstructor
-    public enum CrossoverStrategy {
-        ONE_POINT("onePointCrossover"), TWO_POINT("twoPointCrossover"), UNIFORM("uniformCrossover");
+    public enum SelectionStrategy {
+        ROULETTE("rouletteSelection");
 
         @Getter
         @Setter
         private String name;
     }
 }
+

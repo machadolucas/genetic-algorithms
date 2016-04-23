@@ -4,26 +4,24 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Data
 @Component
-@ConfigurationProperties(prefix = "algorithm.params.mutation")
-public class MutationProperties {
+@ConfigurationProperties(prefix = "algorithm.params.fitness")
+public class FitnessProperties {
 
-    @Value("${energy:0.001}")
-    private double energy;
-    private MutationStrategy strategy;
+    private FitnessStrategy strategy;
 
     @AllArgsConstructor
-    public enum MutationStrategy {
-        SIMPLE("simpleMutation"), UNIFORM("uniformMutation");
+    public enum FitnessStrategy {
+        BUMP("bumpFunction"), GOLD("goldFunction"), RASTRIGIN("rastriginFunction");
 
         @Getter
         @Setter
         private String name;
     }
+
 }
 
