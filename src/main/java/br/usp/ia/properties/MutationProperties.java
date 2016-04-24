@@ -17,6 +17,14 @@ public class MutationProperties {
     private double energy;
     private MutationStrategy strategy;
 
+    @Override
+    public String toString() {
+        return "{\"MutationProperties\":{" +
+                "\"energy\":\"" + energy +
+                "\",\"strategy\":\"" + strategy +
+                "\"}}";
+    }
+
     @AllArgsConstructor
     public enum MutationStrategy {
         SIMPLE("simpleMutation"), UNIFORM("uniformMutation");

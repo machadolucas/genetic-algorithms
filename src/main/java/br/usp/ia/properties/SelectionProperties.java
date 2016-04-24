@@ -17,6 +17,14 @@ public class SelectionProperties {
     private boolean elitism;
     private SelectionStrategy strategy;
 
+    @Override
+    public String toString() {
+        return "{\"SelectionProperties\":{" +
+                "\"elitism\":\"" + this.elitism +
+                "\",\"strategy\":\"" + this.strategy +
+                "\"}}";
+    }
+
     @AllArgsConstructor
     public enum SelectionStrategy {
         ROULETTE("rouletteSelection");

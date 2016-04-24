@@ -24,6 +24,17 @@ public class ExecutionProperties {
     @Value("${populationChangeStrategy:COMPLETE_REPLACEMENT}")
     private PopulationChangeStrategy populationChangeStrategy;
 
+    @Override
+    public String toString() {
+        return "{\"ExecutionProperties\":{" +
+                "\"populationSize\":\"" + this.populationSize +
+                "\",\"generationsToLogOnScreenInterval\":\"" + this.generationsToLogOnScreenInterval +
+                "\",\"stopStrategy\":\"" + this.stopStrategy +
+                "\",\"maxNumberOfGenerations\":\"" + this.maxNumberOfGenerations +
+                "\",\"populationChangeStrategy\":\"" + this.populationChangeStrategy +
+                "\"}}";
+    }
+
     @AllArgsConstructor
     public enum StopStrategy {
         NUMBER_OF_GENERATIONS, CONVERGENCE
@@ -33,5 +44,4 @@ public class ExecutionProperties {
     public enum PopulationChangeStrategy {
         COMPLETE_REPLACEMENT, MU_PLUS_LAMBDA
     }
-
 }

@@ -21,15 +21,17 @@ public class CVSLogging {
     public void fitnessProgress(final int generation, final int generationScreenSkip, final Population population,
                                 final FitnessFunction fitnessFunction) {
 
-        for (final Logging logging : this.loggingList) {
-            logging.fitnessProgress( //
-                    generation, //
-                    generationScreenSkip, //
-                    population.getTotalFitness(fitnessFunction), //
-                    population.getAverageFitness(fitnessFunction), //
-                    population.getMaxFitness(fitnessFunction), //
-                    population.getMinFitness(fitnessFunction) //
-            );
-        }
+        this.loggingList.forEach(logging -> logging.fitnessProgress(//
+                generation, //
+                generationScreenSkip, //
+                population.getTotalFitness(fitnessFunction), //
+                population.getAverageFitness(fitnessFunction), //
+                population.getMaxFitness(fitnessFunction), //
+                population.getMinFitness(fitnessFunction) //
+        ));
+    }
+
+    public void print(final String string) {
+        this.loggingList.forEach(logging -> logging.print(string));
     }
 }

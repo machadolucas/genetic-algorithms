@@ -13,4 +13,9 @@ public class CVSFileLogging implements Logging {
                                 final double populationAvg, final double max, final double min) {
         log.info("{},{},{},{},{}", generation, populationTotal, populationAvg, max, min);
     }
+
+    @Override
+    public void print(final String string) {
+        log.info(string);
+    }
 }

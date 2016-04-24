@@ -17,6 +17,14 @@ public class CrossoverProperties {
     private double energy;
     private CrossoverStrategy strategy;
 
+    @Override
+    public String toString() {
+        return "{\"CrossoverProperties\":{" +
+                "\"energy\":\"" + this.energy +
+                "\",\"strategy\":\"" + this.strategy +
+                "\"}}";
+    }
+
     @AllArgsConstructor
     public enum CrossoverStrategy {
         ONE_POINT("onePointCrossover"), TWO_POINT("twoPointCrossover"), UNIFORM("uniformCrossover");

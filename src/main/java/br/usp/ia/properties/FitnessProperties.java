@@ -14,6 +14,13 @@ public class FitnessProperties {
 
     private FitnessStrategy strategy;
 
+    @Override
+    public String toString() {
+        return "{\"FitnessProperties\":{" +
+                "\"strategy\":\"" + this.strategy +
+                "\"}}";
+    }
+
     @AllArgsConstructor
     public enum FitnessStrategy {
         BUMP("bumpFunction"), GOLD("goldFunction"), RASTRIGIN("rastriginFunction");

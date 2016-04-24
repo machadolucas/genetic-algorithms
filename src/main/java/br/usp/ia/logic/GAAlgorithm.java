@@ -65,13 +65,21 @@ public class GAAlgorithm {
      */
     public void progressAlgorithm() {
 
+        //Imprime no arquivo e na tela os parametros de inicializacao do algoritmo
+        this.logging.print(this.fitnessProperties.toString());
+        this.logging.print(this.crossoverProperties.toString());
+        this.logging.print(this.mutationProperties.toString());
+        this.logging.print(this.selectionProperties.toString());
+        this.logging.print(this.executionProperties.toString());
+
+        final long startTime = System.currentTimeMillis();
         Population population = initializeRandomPopulation(this.executionProperties.getPopulationSize(), this
                 .fitnessFunction);
 
         int generationCount = 0;
 
-
-        while (true) {
+        boolean keepGoing = true;
+        while (keepGoing) {
             generationCount++;
             this.logging.fitnessProgress( //
                     generationCount, this.executionProperties.getGenerationsToLogOnScreenInterval(), //
@@ -80,25 +88,37 @@ public class GAAlgorithm {
             population = evolveGeneration(population);
 
             //Criterio de parada do algoritmo:
-            if (this.executionProperties.getStopStrategy().equals(ExecutionProperties.StopStrategy
-                    .NUMBER_OF_GENERATIONS)) {
-                //Se for pelo numero de geracoes
-                if (generationCount >= this.executionProperties.getMaxNumberOfGenerations()) {
+            switch (this.executionProperties.getStopStrategy()) {
+                case NUMBER_OF_GENERATIONS:
+                    //Se for pelo numero de geracoes
+                    if (generationCount >= this.executionProperties.getMaxNumberOfGenerations()) {
+                        keepGoing = false;
+                    }
                     break;
-                }
-            } else {
-                //Se for por convergencia
-                //TODO Controlar a parada do while pela proximidade da resposta final
-                if (population.getBest(this.fitnessFunction).getFitness(this.fitnessFunction) < 100) {
+                case CONVERGENCE:
+                default:
+                    //Se for por convergencia
+                    //TODO Controlar a parada do while pela proximidade da resposta final
+                    if (population.getBest(this.fitnessFunction).getFitness(this.fitnessFunction) < 100) {
+                        keepGoing = false;
+                    }
                     break;
-                }
+
             }
         }
 
-        System.out.println("Melhor individuo na ultima populacao:");
+        final long endTime = System.currentTimeMillis();
+
+        this.logging.print(""); // Imprime o melhor individuo encontrado
+        this.logging.print("Melhor individuo da ultima geracao:");
         final Individual best = population.getBest(this.fitnessFunction);
-        System.out.println("X=" + best.getXDoubleRepresentation(this.fitnessFunction));
-        System.out.println("Y=" + best.getYDoubleRepresentation(this.fitnessFunction));
+        this.logging.print(best.toString(this.fitnessFunction));
+        this.logging.print("X:" + best.getXDoubleRepresentation(this.fitnessFunction) + ",Y:" + best
+                .getYDoubleRepresentation(this.fitnessFunction));
+
+        this.logging.print(""); // Imprime o tempo total de execucao
+        this.logging.print("Tempo total de execucao (ms):");
+        this.logging.print(String.valueOf(endTime - startTime));
 
     }
 

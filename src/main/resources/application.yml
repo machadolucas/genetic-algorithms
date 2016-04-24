@@ -2,21 +2,18 @@ algorithm:
   params:
     selection:
       strategy: roulette
-      elitism: true
+      elitism: false
     crossover:
       strategy: one_point
       energy: 0.8
     fitness:
-      strategy: rastrigin
+      strategy: gold
     mutation:
       strategy: simple
       energy: 0.001
     execution:
       population-size: 40
-      generations-to-log-on-screen-interval: 50
-      max-number-of-generations: 1000
+      generations-to-log-on-screen-interval: 25
+      max-number-of-generations: 400
       stop-strategy: number_of_generations
       population-change-strategy: complete_replacement
-spring:
-  main:
-    banner-mode: off

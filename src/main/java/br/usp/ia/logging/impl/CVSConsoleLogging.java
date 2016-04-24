@@ -17,4 +17,9 @@ public class CVSConsoleLogging implements Logging {
         }
     }
 
+    @Override
+    public void print(final String string) {
+        log.info(string);
+    }
+
 }
