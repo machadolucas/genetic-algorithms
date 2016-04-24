@@ -21,8 +21,6 @@ public class TestsRunner {
         taskExecutor.setWaitForTasksToCompleteOnShutdown(true);
         taskExecutor.initialize();
 
-        //TODO obter a lista com todos os caminhos dos arquivos de teste.
-
         final List<Path> testPaths = new LinkedList<>();
 
         try (Stream<Path> filePathStream = Files.walk(Paths.get("tests/"))) {
