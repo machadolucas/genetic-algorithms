@@ -5,6 +5,10 @@ import br.usp.ia.entity.Population;
 import br.usp.ia.logic.fitness.FitnessFunction;
 import org.springframework.stereotype.Component;
 
+/**
+ * String para gerar o grafico no wolfram alpha:
+ * plot abs(((cos(x)^4+cos(y)^4)-(2*(cos(x)^2)*(cos(y)^2)))/sqrt(x^2+2*y^2)), x=0..10, y=0..10
+ */
 @Component
 public class BumpFunction implements FitnessFunction {
 
@@ -20,8 +24,7 @@ public class BumpFunction implements FitnessFunction {
         final double temp2 = Math.sqrt(Math.pow(x, 2) + 2 * Math.pow(y, 2));
         final double z = Math.abs((temp0 - temp1) / temp2);
 
-        // Retorna z para inverter a funcao para maximizacao, e soma uma constante para garantir que eh maior que zero
-        return z + 0.001;
+        return z;
     }
 
     @Override
@@ -38,8 +41,8 @@ public class BumpFunction implements FitnessFunction {
 
     @Override
     public Individual getTheBestIndividual(final Population population) {
-        //Obtem na populacao, o individuo com valor minimo (funcao de minimizacao)
-        return population.getIndividuals().stream().min((individual1, individual2) -> //
+        //Obtem na populacao, o individuo com valor maximo
+        return population.getIndividuals().stream().max((individual1, individual2) -> //
                 Double.compare(individual1.getFitness(this), individual2.getFitness(this))).get();
     }
 

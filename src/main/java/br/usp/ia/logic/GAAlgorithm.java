@@ -73,7 +73,10 @@ public class GAAlgorithm {
 
         while (true) {
             generationCount++;
-            this.logging.fitnessProgress(population, this.fitnessFunction);
+            this.logging.fitnessProgress( //
+                    generationCount, this.executionProperties.getGenerationsToLogOnScreenInterval(), //
+                    population, this.fitnessFunction);
+
             population = evolveGeneration(population);
 
             //Criterio de parada do algoritmo:
@@ -91,6 +94,11 @@ public class GAAlgorithm {
                 }
             }
         }
+
+        System.out.println("Melhor individuo na ultima populacao:");
+        final Individual best = population.getBest(this.fitnessFunction);
+        System.out.println("X=" + best.getXDoubleRepresentation(this.fitnessFunction));
+        System.out.println("Y=" + best.getYDoubleRepresentation(this.fitnessFunction));
 
     }
 
@@ -113,7 +121,7 @@ public class GAAlgorithm {
         }
 
         //Vai gerar novos individuos ate encher a populacao da nova geracao
-        while (newGeneration.size() < individualsToSelect) {
+        while (individualsToSelect > 0) {
 
             //Seleciona os individuos que gerarao a proxima geracao
             final List<Individual> selectedParents = //
@@ -138,6 +146,7 @@ public class GAAlgorithm {
                 newGeneration.getIndividuals().add(selectedParents.get(choosenChildren));
             }
 
+            individualsToSelect--;
         }
 
         //Aplica operador de mutacao em toda a nova geracao
@@ -153,10 +162,10 @@ public class GAAlgorithm {
                 parentsAndChildren.getIndividuals().addAll(currentPopulation.getIndividuals());
                 parentsAndChildren.getIndividuals().addAll(newGeneration.getIndividuals());
 
-                parentsAndChildren.getIndividuals().retainAll(this.selection.selectInPopulation(parentsAndChildren,
-                        newGeneration.size(), this.fitnessFunction));
+                final List<Individual> selected = this.selection.selectInPopulation(parentsAndChildren,
+                        currentPopulation.size(), this.fitnessFunction);
 
-                return parentsAndChildren;
+                return new Population(selected);
             case COMPLETE_REPLACEMENT:
             default:
                 //Faz a troca por substituicao completa da geracao atual pela nova

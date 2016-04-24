@@ -5,6 +5,11 @@ import br.usp.ia.entity.Population;
 import br.usp.ia.logic.fitness.FitnessFunction;
 import org.springframework.stereotype.Component;
 
+/**
+ * String para gerar o grafico no wolfram alpha:
+ * plot (1+(x+y+1)^2*(19-14*x+3*x^2-14*y+6*x*y+3*y^2))*(30+(2*x-3*y)^2*(18-32*x+12*x+12*x^2+48*y-36*x*y+27*y^2)),
+ * x=-2..2, y=-2..2
+ */
 @Component
 public class GoldFunction implements FitnessFunction {
 
@@ -20,9 +25,8 @@ public class GoldFunction implements FitnessFunction {
         final double b = 30 + Math.pow((2 * x - 3 * y), 2) * //
                 (18 - 32 * x + 12 * Math.pow(x, 2) + 48 * y - 36 * x * y + 27 * Math.pow(y, 2));
         final double z = a * b;
-        
-        // Retorna -z para inverter a funcao para maximizacao, e soma uma constante para garantir que eh maior que zero
-        return -z + 0.001;
+
+        return z;
     }
 
     @Override
@@ -39,8 +43,8 @@ public class GoldFunction implements FitnessFunction {
 
     @Override
     public Individual getTheBestIndividual(final Population population) {
-        //Obtem na populacao, o individuo com valor minimo (funcao de minimizacao)
-        return population.getIndividuals().stream().min((o1, o2) -> //
+        //Obtem na populacao, o individuo com valor maximo
+        return population.getIndividuals().stream().max((o1, o2) -> //
                 Double.compare(o1.getFitness(this), o2.getFitness(this))).get();
     }
 

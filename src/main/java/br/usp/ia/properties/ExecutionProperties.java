@@ -18,7 +18,7 @@ public class ExecutionProperties {
 
     @Value("${stopStrategy:NUMBER_OF_GENERATIONS}")
     private StopStrategy stopStrategy;
-    @Value("${maxNumberOfGenerations:999999999999}")
+    @Value("${maxNumberOfGenerations:100000000}")
     private int maxNumberOfGenerations;
 
     @Value("${populationChangeStrategy:COMPLETE_REPLACEMENT}")

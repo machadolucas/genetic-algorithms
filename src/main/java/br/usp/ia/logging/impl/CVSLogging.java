@@ -18,9 +18,13 @@ public class CVSLogging {
         this.loggingList = loggingList;
     }
 
-    public void fitnessProgress(final Population population, final FitnessFunction fitnessFunction) {
+    public void fitnessProgress(final int generation, final int generationScreenSkip, final Population population,
+                                final FitnessFunction fitnessFunction) {
+
         for (final Logging logging : this.loggingList) {
             logging.fitnessProgress( //
+                    generation, //
+                    generationScreenSkip, //
                     population.getTotalFitness(fitnessFunction), //
                     population.getAverageFitness(fitnessFunction), //
                     population.getMaxFitness(fitnessFunction), //
