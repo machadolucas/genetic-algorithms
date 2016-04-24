@@ -1,0 +1,19 @@
+algorithm:
+  params:
+    selection:
+      strategy: roulette
+      elitism: false
+    crossover:
+      strategy: one_point
+      energy: 0.4
+    fitness:
+      strategy: rastrigin
+    mutation:
+      strategy: uniform
+      energy: 0.1
+    execution:
+      population-size: 40
+      generations-to-log-on-screen-interval: 9999999
+      max-number-of-generations: 150
+      stop-strategy: convergence
+      population-change-strategy: mu_plus_lambda

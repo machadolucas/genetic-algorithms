@@ -1,0 +1,19 @@
+algorithm:
+  params:
+    selection:
+      strategy: roulette
+      elitism: false
+    crossover:
+      strategy: two_point
+      energy: 0.8
+    fitness:
+      strategy: bump
+    mutation:
+      strategy: uniform
+      energy: 0.01
+    execution:
+      population-size: 40
+      generations-to-log-on-screen-interval: 9999999
+      max-number-of-generations: 150
+      stop-strategy: number_of_generations
+      population-change-strategy: complete_replacement
