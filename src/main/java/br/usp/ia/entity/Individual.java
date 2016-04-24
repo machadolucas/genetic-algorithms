@@ -6,7 +6,7 @@ public class Individual {
 
     private final byte[] chromosome;
 
-    private double fitness;
+    private Double fitness;
 
     /**
      * Construtor que cria um individuo com um cromossomo
@@ -33,7 +33,7 @@ public class Individual {
      */
     public void setGene(final int index, final byte value) {
         this.chromosome[index] = value;
-        this.fitness = 0;
+        this.fitness = null;
     }
 
     /**
@@ -41,7 +41,7 @@ public class Individual {
      * @return o valor do fitness do individuo
      */
     public double getFitness(final FitnessFunction fitnessFunction) {
-        if (this.fitness == 0) {
+        if (this.fitness == null) {
             this.fitness = fitnessFunction.calculate(this);
         }
         return this.fitness;

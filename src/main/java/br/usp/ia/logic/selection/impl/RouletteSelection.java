@@ -1,13 +1,13 @@
 package br.usp.ia.logic.selection.impl;
 
 import br.usp.ia.entity.Individual;
+import br.usp.ia.entity.Population;
 import br.usp.ia.logic.fitness.FitnessFunction;
 import br.usp.ia.logic.selection.Selection;
 import br.usp.ia.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,14 +33,20 @@ public class RouletteSelection implements Selection {
      * @return Uma lista com os individuos selecionados da população
      */
     @Override
-    public List<Individual> selectInPopulation(final List<Individual> population, final int selectionsAmount, final
+    public List<Individual> selectInPopulation(final Population population, final int selectionsAmount, final
     FitnessFunction fitnessFunction) {
 
-        // Obtem o valor maximo de fitness da populacao
-        final Comparator<Individual> comp = (p1, p2) -> Double.compare(p1.getFitness(fitnessFunction), p2.getFitness
-                (fitnessFunction));
-        final Individual fittest = population.stream().max(comp).get();
-        final double maxFitness = fittest.getFitness(fitnessFunction);
+        // Obtem o valor minimo de fitness da populacao
+        final double minFitness = population.getMinFitness(fitnessFunction);
+
+        final double maxFitness;
+        if (minFitness > 0) {
+            // Obtem o valor maximo de fitness da populacao
+            maxFitness = population.getBest(fitnessFunction).getFitness(fitnessFunction);
+        } else {
+            // Obtem o valor maximo de fitness da populacao, normalizado com o minimo negativo
+            maxFitness = population.getBest(fitnessFunction).getFitness(fitnessFunction) + (-minFitness) + 0.0001;
+        }
 
         // Cada posicao desse array guarda quantas vezes cada individuo foi selecionado
         final int[] selections = new int[population.size()];
@@ -53,8 +59,17 @@ public class RouletteSelection implements Selection {
             while (!accepted) {
                 //Ate escolher alguem, calcula aleatoriamente pelo fitness/maxFitness
                 index = this.random.getUniformGenerator().nextInt(population.size());
+                final double fitness;
+                if (minFitness > 0) {
+                    // Valor de fitness do individuo
+                    fitness = population.getIndividuals().get(index).getFitness(fitnessFunction);
+                } else {
+                    // Valor de fitness do individuo normalizado com o minimo negativo
+                    fitness = population.getIndividuals().get(index).getFitness(fitnessFunction) //
+                            + (-minFitness) + 0.0001;
+                }
                 if (this.random.getUniformGenerator().nextDouble() < //
-                        population.get(index).getFitness(fitnessFunction) / maxFitness) {
+                        fitness / maxFitness) {
                     accepted = true;
                 }
             }
@@ -66,9 +81,9 @@ public class RouletteSelection implements Selection {
         final List<Individual> resultingPopulation = new LinkedList<>();
 
         // Preenche lista da populacao selecionada com individuos selecionados
-        for (final int person : selections) {
-            for (int selectionCount = 0; selectionCount < selections[person]; selectionCount++) {
-                resultingPopulation.add(population.get(selections[person]));
+        for (int i = 0; i < selections.length; i++) {
+            for (int selectionsCount = 0; selectionsCount < selections[i]; selectionsCount++) {
+                resultingPopulation.add(population.getIndividuals().get(i));
             }
         }
 

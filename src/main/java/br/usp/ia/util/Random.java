@@ -20,7 +20,7 @@ public class Random {
     /**
      * @return um novo individuo com um cromossomo binario aleatorio
      */
-    public Individual nextIndividual(final FitnessFunction fitnessFunction) {
+    public Individual nextBinaryIndividual(final FitnessFunction fitnessFunction) {
         final byte[] chromosome = new byte[fitnessFunction.getChromosomeLength()];
         for (int i = 0; i < chromosome.length; i++) {
             chromosome[i] = (byte) this.uniformGenerator.nextInt(2);
