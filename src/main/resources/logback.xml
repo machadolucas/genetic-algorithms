@@ -8,7 +8,7 @@
     </appender>
 
     <appender name="resultsFileAppender" class="ch.qos.logback.core.FileAppender">
-        <File>result.csv</File>
+        <File>${testName}.csv</File>
         <Append>true</Append>
         <encoder>
             <Pattern>%msg %n</Pattern>
