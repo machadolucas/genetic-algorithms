@@ -16,7 +16,9 @@ public class Population {
     }
 
     public Individual getBest(final FitnessFunction fitnessFunction) {
-        return fitnessFunction.getTheBestIndividual(this);
+        //Obtem na populacao, o individuo com valor maximo
+        return individuals.stream().max((individual1, individual2) -> //
+                Double.compare(individual1.getFitness(fitnessFunction), individual2.getFitness(fitnessFunction))).get();
     }
 
     public double getMaxFitness(final FitnessFunction fitnessFunction) {
