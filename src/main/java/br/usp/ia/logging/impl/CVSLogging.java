@@ -1,12 +1,13 @@
 package br.usp.ia.logging.impl;
 
-import br.usp.ia.entity.Population;
-import br.usp.ia.logging.Logging;
-import br.usp.ia.logic.fitness.FitnessFunction;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import br.usp.ia.entity.Population;
+import br.usp.ia.logging.Logging;
+import br.usp.ia.logic.fitness.FitnessFunction;
 
 @Component
 public class CVSLogging {
@@ -19,7 +20,7 @@ public class CVSLogging {
     }
 
     public void fitnessProgress(final int generation, final int generationScreenSkip, final Population population,
-                                final FitnessFunction fitnessFunction) {
+            final FitnessFunction fitnessFunction) {
 
         this.loggingList.forEach(logging -> logging.fitnessProgress(//
                 generation, //
@@ -27,8 +28,8 @@ public class CVSLogging {
                 population.getTotalFitness(fitnessFunction), //
                 population.getAverageFitness(fitnessFunction), //
                 population.getMaxFitness(fitnessFunction), //
-                population.getMinFitness(fitnessFunction) //
-        ));
+                population.getMinFitness(fitnessFunction), //
+                fitnessFunction));
     }
 
     public void print(final String string) {
