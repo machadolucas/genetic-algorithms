@@ -80,20 +80,15 @@ public class GAAlgorithm {
 
         int generationCount = 0;
 
-        //variavel pra guardar o ultimo "melhor individuo"
-        Individual lastBest = population.getBest(this.fitnessFunction);
-        //variavel para contar o numero de geracoes de individuos "repetidos"
-        int convergenceCount = 0;
-        //variavel para parar o algoritmo em caso de convergencia
-        int convergenceNumber = 20;
-
         boolean keepGoing = true;
         while (keepGoing) {
             generationCount++;
+            // Faz log da geracao, imprimindo na tela e no arquivo de saida
             this.logging.fitnessProgress( //
                     generationCount, this.executionProperties.getGenerationsToLogOnScreenInterval(), //
                     population, this.fitnessFunction);
 
+            // Evolui a populacao para uma nova geracao
             population = evolveGeneration(population);
 
             //Criterio de parada do algoritmo:
@@ -107,12 +102,9 @@ public class GAAlgorithm {
                 case CONVERGENCE:
                 default:
                     //Se for por convergencia da populacao
-                    //TODO Controlar a parada do while quando nao ocorre melhora significativa na solucao durante um dado nimero de geracoes
-
-                    if (population.getBest(this.fitnessFunction) == lastBest) {
-                        convergenceCount++;
-                    }
-                    if (convergenceCount == convergenceNumber) {
+                    //Só calcula a cada 50 geracoes, pois eh muito custoso
+                    if (generationCount % 50 == 0 //
+                            && population.hasConvergence(this.fitnessFunction)) {
                         keepGoing = false;
                     }
                     break;
