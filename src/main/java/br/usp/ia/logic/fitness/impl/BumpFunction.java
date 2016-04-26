@@ -66,4 +66,9 @@ public class BumpFunction implements FitnessFunction {
         return decimalPrecision;
     }
 
+    @Override
+    public boolean isMinimization() {
+        return true;
+    }
+
 }

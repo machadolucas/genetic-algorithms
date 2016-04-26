@@ -24,4 +24,6 @@ public interface FitnessFunction {
 
     int getDecimalPrecision();
 
+    boolean isMinimization();
+
 }

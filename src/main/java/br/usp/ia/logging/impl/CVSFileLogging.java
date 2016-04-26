@@ -14,11 +14,15 @@ public class CVSFileLogging implements Logging {
     @Override
     public void fitnessProgress(final int generation, final int generationScreenSkip, final double populationTotal,
             final double populationAvg, final double max, final double min, FitnessFunction fitnessFunction) {
+        String inverse = "";
+        if (fitnessFunction.isMinimization()) {
+            inverse = "-";
+        }
         log.info("{},{},{},{},{}", generation, //
-                String.format("%." + fitnessFunction.getDecimalPrecision() + "f", populationTotal), //
-                String.format("%." + fitnessFunction.getDecimalPrecision() + "f", populationAvg), //
-                String.format("%." + fitnessFunction.getDecimalPrecision() + "f", max), //
-                String.format("%." + fitnessFunction.getDecimalPrecision() + "f", min));
+                String.format(inverse + "%." + fitnessFunction.getDecimalPrecision() + "f", populationTotal), //
+                String.format(inverse + "%." + fitnessFunction.getDecimalPrecision() + "f", populationAvg), //
+                String.format(inverse + "%." + fitnessFunction.getDecimalPrecision() + "f", max), //
+                String.format(inverse + "%." + fitnessFunction.getDecimalPrecision() + "f", min));
     }
 
     @Override

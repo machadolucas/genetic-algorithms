@@ -66,4 +66,9 @@ public class RastriginFunction implements FitnessFunction {
         return decimalPrecision;
     }
 
+    @Override
+    public boolean isMinimization() {
+        return false;
+    }
+
 }
