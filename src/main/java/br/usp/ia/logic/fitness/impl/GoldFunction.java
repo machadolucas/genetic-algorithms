@@ -68,4 +68,9 @@ public class GoldFunction implements FitnessFunction {
         return decimalPrecision;
     }
 
+    @Override
+    public boolean isMinimization() {
+        return true;
+    }
+
 }
