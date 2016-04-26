@@ -17,6 +17,8 @@ import javax.annotation.PostConstruct;
 import java.util.LinkedList;
 import java.util.List;
 
+import static br.usp.ia.properties.ExecutionProperties.StopStrategy.CONVERGENCE;
+
 @Component
 public class GAAlgorithm {
 
@@ -78,6 +80,13 @@ public class GAAlgorithm {
 
         int generationCount = 0;
 
+        //variavel pra guardar o ultimo "melhor individuo"
+        Individual lastBest = population.getBest(this.fitnessFunction);
+        //variavel para contar o numero de geracoes de individuos "repetidos"
+        int convergenceCount = 0;
+        //variavel para parar o algoritmo em caso de convergencia
+        int convergenceNumber = 20;
+
         boolean keepGoing = true;
         while (keepGoing) {
             generationCount++;
@@ -97,9 +106,13 @@ public class GAAlgorithm {
                     break;
                 case CONVERGENCE:
                 default:
-                    //Se for por convergencia
-                    //TODO Controlar a parada do while pela proximidade da resposta final
-                    if (population.getBest(this.fitnessFunction).getFitness(this.fitnessFunction) < 100) {
+                    //Se for por convergencia da populacao
+                    //TODO Controlar a parada do while quando nao ocorre melhora significativa na solucao durante um dado nimero de geracoes
+
+                    if (population.getBest(this.fitnessFunction) == lastBest) {
+                        convergenceCount++;
+                    }
+                    if (convergenceCount == convergenceNumber) {
                         keepGoing = false;
                     }
                     break;
