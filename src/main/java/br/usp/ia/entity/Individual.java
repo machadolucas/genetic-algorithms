@@ -18,8 +18,7 @@ public class Individual {
     }
 
     /**
-     * @param index
-     *            indice
+     * @param index indice
      * @return o valor do gene no indice especificado
      */
     public byte getGene(final int index) {
@@ -29,10 +28,8 @@ public class Individual {
     /**
      * Coloca o valor na posicao especificada do indice
      *
-     * @param index
-     *            indice
-     * @param value
-     *            valor a ser colocado
+     * @param index indice
+     * @param value valor a ser colocado
      */
     public void setGene(final int index, final byte value) {
         this.chromosome[index] = value;
@@ -40,12 +37,11 @@ public class Individual {
     }
 
     public byte[] getChromosome() {
-        return chromosome;
+        return this.chromosome;
     }
 
     /**
-     * @param fitnessFunction
-     *            uma funcao fitness
+     * @param fitnessFunction uma funcao fitness
      * @return o valor do fitness do individuo
      */
     public double getFitness(final FitnessFunction fitnessFunction) {
@@ -101,24 +97,48 @@ public class Individual {
                 (Math.pow(2, fitnessFunction.getYLength()) - 1);
     }
 
-    public void setChromosomeFromDoubleValues(double x, double y) {
-        // TODO
+    /**
+     * Usa a funcao inversa do getXDoubleRepresentation. obtida matematicamente
+     * <p>
+     * inteiroPositivo = (double - limInf) * (2^qtdeBits - 1) / (limSup - limInf)
+     * converte inteiroPositivo em binario
+     *
+     * @param x
+     * @param y
+     * @param fitnessFunction
+     */
+    public void setChromosomeFromDoubleValues(final double x, final double y, final FitnessFunction fitnessFunction) {
+        final int intX = Math.toIntExact(Math.round(( //
+                x - fitnessFunction.getLowerLimit()) * //
+                (Math.pow(2, fitnessFunction.getXLength()) - 1) / //
+                (fitnessFunction.getUpperLimit() - fitnessFunction.getLowerLimit())));
+        final int intY = Math.toIntExact(Math.round(( //
+                y - fitnessFunction.getLowerLimit()) * //
+                (Math.pow(2, fitnessFunction.getYLength()) - 1) / //
+                (fitnessFunction.getUpperLimit() - fitnessFunction.getLowerLimit())));
+        final String binaryString = Integer.toBinaryString(intX) + Integer.toBinaryString(intY);
+
+        for (int i = 0; i < binaryString.length(); i++) {
+            if (binaryString.charAt(i) == '0') {
+                setGene(i, (byte) 0);
+            } else {
+                setGene(i, (byte) 1);
+            }
+        }
+
     }
 
     /**
      * Calcula a distancia entre dois individuos (Pitagoras)
-     * 
+     *
      * @param other
      * @param fitnessFunction
      * @return
      */
     public double distanceTo(final Individual other, final FitnessFunction fitnessFunction) {
-        return Math
-                .sqrt(Math
-                        .pow((other.getYDoubleRepresentation(fitnessFunction)
-                                - this.getYDoubleRepresentation(fitnessFunction)), 2)
-                        + Math.pow((other.getXDoubleRepresentation(fitnessFunction)
-                                - this.getXDoubleRepresentation(fitnessFunction)), 2));
+        return Math.sqrt(Math.pow((other.getYDoubleRepresentation(fitnessFunction) - this.getYDoubleRepresentation
+                (fitnessFunction)), 2) + Math.pow((other.getXDoubleRepresentation(fitnessFunction) - this
+                .getXDoubleRepresentation(fitnessFunction)), 2));
     }
 
 }

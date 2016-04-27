@@ -7,7 +7,7 @@ algorithm:
       strategy: one_point
       energy: 0.8
     fitness:
-      strategy: gold
+      strategy: rastrigin
     mutation:
       strategy: simple
       energy: 0.001
@@ -15,5 +15,5 @@ algorithm:
       population-size: 40
       generations-to-log-on-screen-interval: 25
       max-number-of-generations: 400
-      stop-strategy: number_of_generations
+      stop-strategy: convergence
       population-change-strategy: complete_replacement

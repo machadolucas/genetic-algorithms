@@ -8,6 +8,7 @@ import br.usp.ia.logic.fitness.FitnessFunction;
 import br.usp.ia.logic.mutation.Mutation;
 import br.usp.ia.logic.selection.Selection;
 import br.usp.ia.properties.*;
+import br.usp.ia.util.KMeansConvergence;
 import br.usp.ia.util.Random;
 import br.usp.ia.util.StrategySolver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.util.LinkedList;
 import java.util.List;
-
-import static br.usp.ia.properties.ExecutionProperties.StopStrategy.CONVERGENCE;
 
 @Component
 public class GAAlgorithm {
@@ -29,6 +28,10 @@ public class GAAlgorithm {
     //====== Criador de dados aleatorios
     @Autowired
     private Random random;
+
+    //====== Calcula se ha convergencia numa populacao por k-means
+    @Autowired
+    private KMeansConvergence kMeansConvergence;
 
     //====== Propriedades da instancia de execucao
     @Autowired
@@ -102,9 +105,9 @@ public class GAAlgorithm {
                 case CONVERGENCE:
                 default:
                     //Se for por convergencia da populacao
-                    //Só calcula a cada 50 geracoes, pois eh muito custoso
-                    if (generationCount % 50 == 0 //
-                            && population.hasConvergence(this.fitnessFunction)) {
+                    //Só calcula a cada 25 geracoes, pois eh muito custoso
+                    if (generationCount % 25 == 0 //
+                            && this.kMeansConvergence.hasConvergence(population, this.fitnessFunction)) {
                         keepGoing = false;
                     }
                     break;
