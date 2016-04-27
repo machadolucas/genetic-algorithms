@@ -28,9 +28,9 @@ public class KMeansConvergence {
 
         // Tenta definir qua a quantidade de clusters deve ser 10% do tamanho da populacao
         int k = Math.toIntExact(Math.round(population.size() * 0.1));
-        if (k < 5) { // para garantir que haja no minimo 3 grupos
+        if (k < 5) { // para garantir que haja no minimo 5 grupos
             k = 5;
-        } else if (k > 15) { // ou que haja no maximo 10 grupos
+        } else if (k > 15) { // ou que haja no maximo 15 grupos
             k = 15;
         }
 
