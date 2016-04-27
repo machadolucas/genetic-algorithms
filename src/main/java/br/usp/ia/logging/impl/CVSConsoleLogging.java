@@ -19,7 +19,7 @@ public class CVSConsoleLogging implements Logging {
             inverse = "-";
         }
         if (generation <= 25 || generation % generationScreenSkip == 0) {
-            log.info("Geracao:{},\tTotal:{},\tAvg:{},\tMax:{},\tMin:{}", //
+            log.info("Geracao:{}\tTotal:{}\tAvg:{}\tMax:{}\tMin:{}", //
                     generation, //
                     String.format(inverse + "%." + fitnessFunction.getDecimalPrecision() + "f", populationTotal), //
                     String.format(inverse + "%." + fitnessFunction.getDecimalPrecision() + "f", populationAvg), //

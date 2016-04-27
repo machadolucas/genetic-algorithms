@@ -18,7 +18,7 @@ public class CVSFileLogging implements Logging {
         if (fitnessFunction.isMinimization()) {
             inverse = "-";
         }
-        log.info("{},{},{},{},{}", generation, //
+        log.info("{}\t{}\t{}\t{}\t{}", generation, //
                 String.format(inverse + "%." + fitnessFunction.getDecimalPrecision() + "f", populationTotal), //
                 String.format(inverse + "%." + fitnessFunction.getDecimalPrecision() + "f", populationAvg), //
                 String.format(inverse + "%." + fitnessFunction.getDecimalPrecision() + "f", max), //
