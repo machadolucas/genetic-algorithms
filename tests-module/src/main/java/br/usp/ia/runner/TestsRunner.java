@@ -33,15 +33,11 @@ public class TestsRunner {
             e.printStackTrace();
         }
 
-        final long startTime = System.currentTimeMillis();
         testPaths.forEach(path -> {
             final TestTask task = new TestTask(path);
             taskExecutor.execute(task);
         });
 
         taskExecutor.shutdown();
-
-        final long endTime = System.currentTimeMillis();
-        System.out.println("Tempo total de execucao (s):" + String.valueOf((endTime - startTime) / 1000));
     }
 }
