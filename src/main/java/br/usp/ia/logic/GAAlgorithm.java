@@ -78,6 +78,8 @@ public class GAAlgorithm {
         this.logging.print(this.executionProperties.toString());
 
         final long startTime = System.currentTimeMillis();
+
+        //Inicializa a populacao inicial aleatoriamente
         Population population = initializeRandomPopulation(this.executionProperties.getPopulationSize(), this
                 .fitnessFunction);
 
@@ -85,13 +87,15 @@ public class GAAlgorithm {
 
         boolean keepGoing = true;
         while (keepGoing) {
+            //Incrementa o contador de geracoes
             generationCount++;
-            // Faz log da geracao, imprimindo na tela e no arquivo de saida
+
+            //Faz o log em tela e em arquivo dos atributos de fitness dessa geracao
             this.logging.fitnessProgress( //
                     generationCount, this.executionProperties.getGenerationsToLogOnScreenInterval(), //
                     population, this.fitnessFunction);
 
-            // Evolui a populacao para uma nova geracao
+            //Evolui a populacao atual para uma nova geracao
             population = evolveGeneration(population);
 
             //Criterio de parada do algoritmo:
@@ -117,7 +121,12 @@ public class GAAlgorithm {
 
         final long endTime = System.currentTimeMillis();
 
-        this.logging.print(""); // Imprime o melhor individuo encontrado
+        //Faz o log em tela e em arquivo dos atributos de fitness da ultima geracao
+        this.logging.fitnessProgress( //
+                generationCount, this.executionProperties.getGenerationsToLogOnScreenInterval(), //
+                population, this.fitnessFunction);
+
+        this.logging.print(""); // Imprime os valores do melhor individuo encontrado
         this.logging.print("Melhor individuo da ultima geracao:");
         final Individual best = population.getBest(this.fitnessFunction);
         this.logging.print(best.toString(this.fitnessFunction));
@@ -125,8 +134,7 @@ public class GAAlgorithm {
                 .getYDoubleRepresentation(this.fitnessFunction));
 
         this.logging.print(""); // Imprime o tempo total de execucao
-        this.logging.print("Tempo total de execucao (ms):");
-        this.logging.print(String.valueOf(endTime - startTime));
+        this.logging.print("Tempo total de execucao (ms): " + String.valueOf(endTime - startTime));
 
     }
 
