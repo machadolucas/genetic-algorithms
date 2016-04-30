@@ -17,7 +17,7 @@ class TestTask implements Runnable {
 
         final String testName = this.testFilePath.getFileName().toString().replace(".yml", "");
         final String[] command = {"java", "-jar", "-DtestName=" + testName, "genetic-algorithms-1.0.jar", //
-                "--spring.config.location=\"" + this.testFilePath.toString() + "\""};
+                "--spring.config.name=" + testName, "--spring.config.location=tests/"};
         final ProcessBuilder processBuilder = new ProcessBuilder(command);
 
         try {
