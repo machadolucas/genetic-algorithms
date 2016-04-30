@@ -102,7 +102,7 @@ public class GAAlgorithm {
             switch (this.executionProperties.getStopStrategy()) {
                 case NUMBER_OF_GENERATIONS:
                     //Se for pelo numero de geracoes
-                    if (generationCount >= this.executionProperties.getMaxNumberOfGenerations()) {
+                    if (generationCount + 1 >= this.executionProperties.getMaxNumberOfGenerations()) {
                         keepGoing = false;
                     }
                     break;
@@ -123,7 +123,7 @@ public class GAAlgorithm {
 
         //Faz o log em tela e em arquivo dos atributos de fitness da ultima geracao
         this.logging.fitnessProgress( //
-                generationCount, this.executionProperties.getGenerationsToLogOnScreenInterval(), //
+                generationCount + 1, this.executionProperties.getGenerationsToLogOnScreenInterval(), //
                 population, this.fitnessFunction);
 
         this.logging.print(""); // Imprime os valores do melhor individuo encontrado
