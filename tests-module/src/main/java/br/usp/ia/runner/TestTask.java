@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.concurrent.TimeUnit;
 
 @Data
 @AllArgsConstructor
@@ -25,9 +26,11 @@ class TestTask implements Runnable {
 
             //Espera pra obter o valor de saida
             try {
-                final int exitValue = process.waitFor();
-                if (exitValue != 0) {
-                    System.out.println(testName + ", resultou em :" + exitValue);
+                final boolean exitValue = process.waitFor(150, TimeUnit.SECONDS);
+                if (!exitValue) {
+                    System.out.println("Reexecute: java -jar -DtestName=" + testName + //
+                            " genetic-algorithms-1.0.jar" + //
+                            " --spring.config.name=" + testName + " --spring.config.location=tests/");
                 }
             } catch (final InterruptedException e) {
                 e.printStackTrace();
