@@ -34,6 +34,8 @@ class TestTask implements Runnable {
                 }
             } catch (final InterruptedException e) {
                 e.printStackTrace();
+            } finally {
+                process.destroyForcibly();
             }
         } catch (final IOException e) {
             e.printStackTrace();
