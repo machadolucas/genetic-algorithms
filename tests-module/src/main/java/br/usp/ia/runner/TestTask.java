@@ -26,7 +26,7 @@ class TestTask implements Runnable {
 
             //Espera pra obter o valor de saida
             try {
-                final boolean exitValue = process.waitFor(60, TimeUnit.SECONDS);
+                final boolean exitValue = process.waitFor(120, TimeUnit.SECONDS);
                 if (!exitValue) {
                     System.out.println("java -jar -DtestName=" + testName + //
                             " genetic-algorithms-1.0.jar" + //
