@@ -1,0 +1,25 @@
+{"FitnessProperties":{"strategy":"BUMP"}} 
+{"CrossoverProperties":{"energy":"0.8","strategy":"ONE_POINT"}} 
+{"MutationProperties":{"energy":"0.01","strategy":"UNIFORM"}} 
+{"SelectionProperties":{"elitism":"false","strategy":"ROULETTE"}} 
+{"ExecutionProperties":{"populationSize":"800","generationsToLogOnScreenInterval":"9999999","stopStrategy":"NUMBER_OF_GENERATIONS","maxNumberOfGenerations":"1500","populationChangeStrategy":"MU_PLUS_LAMBDA"}} 
+1	-27.569	-0.034	-0.499	-0.000 
+2	-126.146	-0.158	-0.614	-0.000 
+3	-253.753	-0.317	-0.649	-0.022 
+4	-349.033	-0.436	-0.671	-0.015 
+5	-396.047	-0.495	-0.671	-0.039 
+6	-418.739	-0.523	-0.671	-0.016 
+7	-440.133	-0.550	-0.671	-0.116 
+8	-452.847	-0.566	-0.670	-0.018 
+9	-470.379	-0.588	-0.673	-0.131 
+10	-476.287	-0.595	-0.673	-0.120 
+11	-488.191	-0.610	-0.673	-0.055 
+12	-490.802	-0.614	-0.673	-0.140 
+13	-498.128	-0.623	-0.673	-0.151 
+14	-504.207	-0.630	-0.673	-0.172 
+15	-506.783	-0.633	-0.673	-0.086 
+16	-510.033	-0.638	-0.673	-0.104 
+17	-511.941	-0.640	-0.673	-0.184 
+18	-513.454	-0.642	-0.673	-0.231 
+19	-513.923	-0.642	-0.673	-0.166 
+20	-514.554	-0.643	-0.673	-0.110 

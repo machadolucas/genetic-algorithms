@@ -1,0 +1,11 @@
+{"FitnessProperties":{"strategy":"BUMP"}} 
+{"CrossoverProperties":{"energy":"0.4","strategy":"ONE_POINT"}} 
+{"MutationProperties":{"energy":"0.01","strategy":"UNIFORM"}} 
+{"SelectionProperties":{"elitism":"true","strategy":"ROULETTE"}} 
+{"ExecutionProperties":{"populationSize":"800","generationsToLogOnScreenInterval":"9999999","stopStrategy":"CONVERGENCE","maxNumberOfGenerations":"0","populationChangeStrategy":"COMPLETE_REPLACEMENT"}} 
+1	-27.761	-0.035	-0.664	-0.000 
+2	-78.940	-0.099	-0.665	-0.000 
+3	-145.110	-0.181	-0.672	-0.000 
+4	-246.822	-0.309	-0.672	-0.000 
+5	-307.951	-0.385	-0.674	-0.000 
+6	-NaN	-NaN	-NaN	-0.000 
