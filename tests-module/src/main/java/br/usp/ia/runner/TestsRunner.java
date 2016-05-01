@@ -33,6 +33,10 @@ public class TestsRunner {
             e.printStackTrace();
         }
 
+        System.out.println();
+        System.out.println("========================================");
+        System.out.println();
+
         testPaths.forEach(path -> {
             final TestTask task = new TestTask(path);
             taskExecutor.execute(task);

@@ -26,9 +26,9 @@ class TestTask implements Runnable {
 
             //Espera pra obter o valor de saida
             try {
-                final boolean exitValue = process.waitFor(150, TimeUnit.SECONDS);
+                final boolean exitValue = process.waitFor(60, TimeUnit.SECONDS);
                 if (!exitValue) {
-                    System.out.println("Reexecute: java -jar -DtestName=" + testName + //
+                    System.out.println("java -jar -DtestName=" + testName + //
                             " genetic-algorithms-1.0.jar" + //
                             " --spring.config.name=" + testName + " --spring.config.location=tests/");
                 }
