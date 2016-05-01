@@ -24,6 +24,12 @@ public class BumpFunction implements FitnessFunction {
         final double temp0 = Math.pow(Math.cos(x), 4) + Math.pow(Math.cos(y), 4);
         final double temp1 = 2 * Math.pow(Math.cos(x), 2) * Math.pow(Math.cos(y), 2);
         final double temp2 = Math.sqrt(Math.pow(x, 2) + 2 * Math.pow(y, 2));
+
+        // Para que nao haja divisao por zero. Segundo funcao "Bump 2" dos slides.
+        if (temp2 == 0) {
+            return 0;
+        }
+
         final double z = Math.abs((temp0 - temp1) / temp2);
 
         return z;
@@ -49,9 +55,9 @@ public class BumpFunction implements FitnessFunction {
     public int getDecimalPrecision() {
         if (decimalPrecision == 0) { // So calcula se nao foi calculado antes (cache)
             final double precisionValue = (getUpperLimit() - getLowerLimit()) / (Math.pow(2, getXLength()) - 1);
-            DecimalFormat df = new DecimalFormat("0");
+            final DecimalFormat df = new DecimalFormat("0");
             df.setMaximumFractionDigits(340);
-            String plainDouble = df.format(precisionValue);
+            final String plainDouble = df.format(precisionValue);
             int precision = 1;
             for (int i = 2; i < plainDouble.length(); i++) {
                 if (plainDouble.charAt(i) == '0') {
