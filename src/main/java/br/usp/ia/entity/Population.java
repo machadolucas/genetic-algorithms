@@ -16,8 +16,8 @@ public class Population {
     }
 
     public Individual getBest(final FitnessFunction fitnessFunction) {
-        // Obtem na populacao, o individuo com valor maximo
-        return this.individuals.stream().max((individual1, individual2) -> //
+        // Obtem na populacao, o individuo com valor minimo
+        return this.individuals.stream().min((individual1, individual2) -> //
                 Double.compare(individual1.getFitness(fitnessFunction), individual2.getFitness(fitnessFunction))).get();
     }
 

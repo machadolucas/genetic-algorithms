@@ -22,7 +22,7 @@ public class UniformMutation implements Mutation {
             if (this.random.getUniformGenerator().nextDouble() <= probability) {
 
                 //Calcula aleatoriamente o novo valor para o gene
-                final byte gene = (byte) this.random.getUniformGenerator().nextInt(2);
+                final int gene = this.random.getUniformGenerator().nextInt(2);
                 individual.setGene(i, gene);
             }
         }
