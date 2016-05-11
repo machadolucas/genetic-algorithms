@@ -13,18 +13,15 @@ public class CVSConsoleLogging implements Logging {
 
     @Override
     public void fitnessProgress(final int generation, final int generationScreenSkip, final double populationTotal,
-            final double populationAvg, final double max, final double min, FitnessFunction fitnessFunction) {
-        String inverse = "";
-        if (fitnessFunction.isMinimization()) {
-            inverse = "-";
-        }
+            final double populationAvg, final double max, final double min, final FitnessFunction fitnessFunction) {
+        final String inverse = "";
         if (generation <= 25 || generation % generationScreenSkip == 0) {
             log.info("Geracao:{}\tTotal:{}\tAvg:{}\tMax:{}\tMin:{}", //
                     generation, //
-                    String.format(inverse + "%." + fitnessFunction.getDecimalPrecision() + "f", populationTotal), //
-                    String.format(inverse + "%." + fitnessFunction.getDecimalPrecision() + "f", populationAvg), //
-                    String.format(inverse + "%." + fitnessFunction.getDecimalPrecision() + "f", max), //
-                    String.format(inverse + "%." + fitnessFunction.getDecimalPrecision() + "f", min));
+                    String.format(inverse + "%.3f", populationTotal), //
+                    String.format(inverse + "%.3f", populationAvg), //
+                    String.format(inverse + "%.3f", max), //
+                    String.format(inverse + "%.3f", min));
         }
     }
 

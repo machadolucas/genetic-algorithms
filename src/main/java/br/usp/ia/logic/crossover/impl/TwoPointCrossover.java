@@ -25,8 +25,8 @@ public class TwoPointCrossover implements Crossover {
                 firstCutPosition) + firstCutPosition;
 
         //Inicializa cromossomo dos filhos
-        final byte[] son1 = new byte[father.getChromosomeLength()];
-        final byte[] son2 = new byte[father.getChromosomeLength()];
+        final int[] son1 = new int[father.getChromosomeLength()];
+        final int[] son2 = new int[father.getChromosomeLength()];
 
         // Preenche filhos ate a primeira posicao de corte
         for (int i = 0; i < firstCutPosition; i++) {

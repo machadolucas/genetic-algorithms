@@ -18,11 +18,6 @@ public class StrategySolver {
     @Autowired
     BeanFactory bf;
 
-    public FitnessFunction getFitnessFunction(final FitnessProperties fitnessProperties) {
-        final FitnessProperties.FitnessStrategy function = fitnessProperties.getStrategy();
-        return this.bf.getBean(function.getName(), FitnessFunction.class);
-    }
-
     public Crossover getCrossover(final CrossoverProperties crossoverProperties) {
         final CrossoverProperties.CrossoverStrategy strategy = crossoverProperties.getStrategy();
         return this.bf.getBean(strategy.getName(), Crossover.class);

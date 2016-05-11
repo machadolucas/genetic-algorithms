@@ -78,12 +78,12 @@ public class KMeansConvergence {
                     double sumX = 0;
                     double sumY = 0;
                     for (final Individual individual : clusterIndividuals) {
-                        sumX += individual.getXDoubleRepresentation(fitnessFunction);
-                        sumY += individual.getYDoubleRepresentation(fitnessFunction);
+//                        sumX += individual.getXDoubleRepresentation(fitnessFunction);
+//                        sumY += individual.getYDoubleRepresentation(fitnessFunction);
                     }
                     final double newX = sumX / amountOfIndividuals;
                     final double newY = sumY / amountOfIndividuals;
-                    c.setChromosomeFromDoubleValues(newX, newY, fitnessFunction);
+//                    c.setChromosomeFromDoubleValues(newX, newY, fitnessFunction);
                 }
             });
 
@@ -101,7 +101,7 @@ public class KMeansConvergence {
 
         // Define a distancia maxima entre os centroides para considerar convergencia como 10% do espaco de busca em
         // uma dimensao. Com D dimensoes, isso equivale a 0.1^D da area total de busca (1). No caso, 1% da area.
-        final double maxConvergenceDistance = fitnessFunction.getUpperLimit() - fitnessFunction.getLowerLimit() * 0.1;
+        final double maxConvergenceDistance = 1; //TODO arrumar
 
         // Calcula as distancias entre todos os centroides. Se uma delas for maior que maxConvergenceDistance, nao ha
         // convergencia da populacao

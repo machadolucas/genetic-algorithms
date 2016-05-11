@@ -1,10 +1,12 @@
 package br.usp.ia.util;
 
+import lombok.Data;
+
+import org.springframework.stereotype.Component;
+
 import br.usp.ia.entity.Individual;
 import br.usp.ia.logic.fitness.FitnessFunction;
 import it.unimi.dsi.util.XorShift1024StarRandom;
-import lombok.Data;
-import org.springframework.stereotype.Component;
 
 @Data
 @Component
@@ -21,9 +23,9 @@ public class Random {
      * @return um novo individuo com um cromossomo binario aleatorio
      */
     public Individual nextBinaryIndividual(final FitnessFunction fitnessFunction) {
-        final byte[] chromosome = new byte[fitnessFunction.getChromosomeLength()];
+        final int[] chromosome = new int[110]; //TODO
         for (int i = 0; i < chromosome.length; i++) {
-            chromosome[i] = (byte) this.uniformGenerator.nextInt(2);
+            chromosome[i] = this.uniformGenerator.nextInt(2); // TODO gerar no range certo, sem repeticao
         }
         return new Individual(chromosome);
     }
