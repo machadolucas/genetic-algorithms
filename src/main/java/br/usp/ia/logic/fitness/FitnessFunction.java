@@ -11,6 +11,6 @@ public abstract class FitnessFunction {
     @Setter
     private TestInstance testInstance;
 
-    public abstract double calculate(Individual individual);
+    public abstract int calculate(Individual individual);
 
 }

@@ -49,6 +49,9 @@ public class TestInstanceParser {
         final String edgeWeightType = lines.get(4).trim().substring(19);
         testInstance.setEdgeWeightType(edgeWeightType);
 
+        final Integer trucks = Integer.valueOf(lines.get(0).trim().substring(lines.get(0).indexOf("k") + 1));
+        testInstance.setTrucks(trucks);
+
         final Integer capacity = Integer.valueOf(lines.get(5).trim().substring(11));
         testInstance.setCapacity(capacity);
 
