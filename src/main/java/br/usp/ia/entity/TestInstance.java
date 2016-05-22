@@ -20,6 +20,8 @@ public class TestInstance {
 
     private String edgeWeightType;
 
+    private Integer trucks;
+
     private Integer capacity;
 
     private List<List<Double>> coords;

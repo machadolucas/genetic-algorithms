@@ -1,12 +1,12 @@
 package br.usp.ia.util;
 
-import lombok.Data;
-
-import org.springframework.stereotype.Component;
-
 import br.usp.ia.entity.Individual;
 import br.usp.ia.logic.fitness.FitnessFunction;
 import it.unimi.dsi.util.XorShift1024StarRandom;
+import lombok.Data;
+import org.springframework.stereotype.Component;
+
+import java.util.LinkedHashSet;
 
 @Data
 @Component
@@ -20,13 +20,34 @@ public class Random {
     XorShift1024StarRandom uniformGenerator = new XorShift1024StarRandom();
 
     /**
-     * @return um novo individuo com um cromossomo binario aleatorio
+     * @return um novo individuo com um cromossomo aleatorio
      */
     public Individual nextBinaryIndividual(final FitnessFunction fitnessFunction) {
-        final int[] chromosome = new int[110]; //TODO
-        for (int i = 0; i < chromosome.length; i++) {
-            chromosome[i] = this.uniformGenerator.nextInt(2); // TODO gerar no range certo, sem repeticao
+        final int depotsAmount = fitnessFunction.getTestInstance().getDepotSections().size();
+        final int nodesAmount = fitnessFunction.getTestInstance().getDimension() - depotsAmount;
+        final int trucksAmount = fitnessFunction.getTestInstance().getTrucks();
+
+        final int[] chromosome = new int[nodesAmount + trucksAmount - depotsAmount];
+
+        final LinkedHashSet<Integer> generated = new LinkedHashSet<>();
+        // Como estamos adicionando num Set, ele vai gerar todos os numeros sem repeticao ate preencher tudo
+        while (generated.size() < nodesAmount + trucksAmount - depotsAmount) {
+
+            final Integer next = this.uniformGenerator.nextInt(nodesAmount + trucksAmount) + 1;
+
+            //Se for um deposito, continua e gera outro
+            if (fitnessFunction.getTestInstance().getDepotSections().contains(next)) {
+                continue;
+            }
+            generated.add(next);
         }
+
+        int i = 0;
+        for (final Integer number : generated) {
+            chromosome[i] = number;
+            i++;
+        }
+
         return new Individual(chromosome);
     }
 

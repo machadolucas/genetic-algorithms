@@ -2,13 +2,13 @@ package br.usp.ia.entity;
 
 import br.usp.ia.logic.fitness.FitnessFunction;
 
-import java.util.Arrays;
+import java.util.*;
 
 public class Individual {
 
     private final int[] chromosome;
 
-    private Double fitness;
+    private Integer fitness;
 
     /**
      * Construtor que cria um individuo com um cromossomo
@@ -46,7 +46,7 @@ public class Individual {
      * @param fitnessFunction uma funcao fitness
      * @return o valor do fitness do individuo
      */
-    public double getFitness(final FitnessFunction fitnessFunction) {
+    public int getFitness(final FitnessFunction fitnessFunction) {
         if (this.fitness == null) {
             this.fitness = fitnessFunction.calculate(this);
         }
@@ -65,6 +65,24 @@ public class Individual {
      */
     public String toString(final FitnessFunction fitnessFunction) {
         return Arrays.toString(this.chromosome);
+    }
+
+    public Map<Integer, List<Integer>> getObjectRepresentation(final FitnessFunction fitnessFunction) {
+        final Map<Integer, List<Integer>> objectRepresentation = new HashMap<>();
+        final int nodesAmount = fitnessFunction.getTestInstance().getDimension();
+
+        List<Integer> path = new LinkedList<>();
+        for (final int geneValue : this.chromosome) {
+            if (geneValue <= nodesAmount) {
+                path.add(geneValue);
+            } else {
+                objectRepresentation.put(geneValue - nodesAmount, new LinkedList<>(path));
+                path = new LinkedList<>();
+            }
+            //Pegar a ultima lista gerada e adicionar o ultimo caminhao
+        }
+
+        return objectRepresentation;
     }
 
     /**

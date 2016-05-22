@@ -18,14 +18,14 @@ public class Population {
     public Individual getBest(final FitnessFunction fitnessFunction) {
         // Obtem na populacao, o individuo com valor minimo
         return this.individuals.stream().min((individual1, individual2) -> //
-                Double.compare(individual1.getFitness(fitnessFunction), //
+                Integer.compare(individual1.getFitness(fitnessFunction), //
                         individual2.getFitness(fitnessFunction))).get();
     }
 
     public double getMaxFitness(final FitnessFunction fitnessFunction) {
         // Obtem na populacao, o valor do individuo com maximo fitness
         return this.individuals.stream().max((individual1, individual2) -> //
-                Double.compare(individual1.getFitness(fitnessFunction), //
+                Integer.compare(individual1.getFitness(fitnessFunction), //
                         individual2.getFitness(fitnessFunction))) //
                 .get().getFitness(fitnessFunction);
     }
@@ -33,20 +33,20 @@ public class Population {
     public double getMinFitness(final FitnessFunction fitnessFunction) {
         // Obtem na populacao, o valor do individuo com minimo fitness
         return this.individuals.stream().min((individual1, individual2) -> //
-                Double.compare(individual1.getFitness(fitnessFunction), //
+                Integer.compare(individual1.getFitness(fitnessFunction), //
                         individual2.getFitness(fitnessFunction))) //
                 .get().getFitness(fitnessFunction);
     }
 
     public double getAverageFitness(final FitnessFunction fitnessFunction) {
         // Obtem na populacao, o valor da media aritmetica simples do fitness dos individuos
-        return this.individuals.stream().mapToDouble(individual -> //
+        return this.individuals.stream().mapToInt(individual -> //
                 individual.getFitness(fitnessFunction)).average().getAsDouble();
     }
 
     public double getTotalFitness(final FitnessFunction fitnessFunction) {
         // Obtem na populacao, o valor da soma do fitness dos individuos
-        return this.individuals.stream().mapToDouble(individual -> //
+        return this.individuals.stream().mapToInt(individual -> //
                 individual.getFitness(fitnessFunction)).sum();
     }
 
