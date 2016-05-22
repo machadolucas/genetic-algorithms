@@ -1,0 +1,17 @@
+algorithm:
+  params:
+    selection:
+      strategy: roulette
+      elitism: true
+    crossover:
+      strategy: one_point
+      energy: 0.4
+    mutation:
+      strategy: simple
+      energy: 0.01
+    execution:
+      population-size: 40
+      generations-to-log-on-screen-interval: 50
+      max-number-of-generations: 10
+      stop-strategy: number_of_generations
+      population-change-strategy: complete_replacement

@@ -25,7 +25,7 @@ public class TestsRunner {
 
         try (Stream<Path> filePathStream = Files.walk(Paths.get("tests/"))) {
             filePathStream.forEach(filePath -> {
-                if (Files.isRegularFile(filePath)) {
+                if (Files.isRegularFile(filePath) && filePath.endsWith(".vrp")) {
                     testPaths.add(filePath);
                 }
             });

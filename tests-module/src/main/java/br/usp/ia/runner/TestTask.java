@@ -16,9 +16,8 @@ class TestTask implements Runnable {
     @Override
     public void run() {
 
-        final String testName = this.testFilePath.getFileName().toString().replace(".yml", "");
-        final String[] command = {"java", "-jar", "-DtestName=" + testName, "genetic-algorithms-1.0.jar", //
-                "--spring.config.name=" + testName, "--spring.config.location=tests/"};
+        final String testName = this.testFilePath.getFileName().toString().replace(".vrp", "");
+        final String[] command = {"java", "-jar", "-DtestName=" + testName, "genetic-algorithms-2.0.jar"};
         final ProcessBuilder processBuilder = new ProcessBuilder(command);
 
         try {
@@ -29,8 +28,7 @@ class TestTask implements Runnable {
                 final boolean exitValue = process.waitFor(120, TimeUnit.SECONDS);
                 if (!exitValue) {
                     System.out.println("java -jar -DtestName=" + testName + //
-                            " genetic-algorithms-1.0.jar" + //
-                            " --spring.config.name=" + testName + " --spring.config.location=tests/");
+                            " genetic-algorithms-2.0.jar");
                 }
             } catch (final InterruptedException e) {
                 e.printStackTrace();

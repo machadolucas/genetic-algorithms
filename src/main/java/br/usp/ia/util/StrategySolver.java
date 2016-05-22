@@ -1,11 +1,9 @@
 package br.usp.ia.util;
 
 import br.usp.ia.logic.crossover.Crossover;
-import br.usp.ia.logic.fitness.FitnessFunction;
 import br.usp.ia.logic.mutation.Mutation;
 import br.usp.ia.logic.selection.Selection;
 import br.usp.ia.properties.CrossoverProperties;
-import br.usp.ia.properties.FitnessProperties;
 import br.usp.ia.properties.MutationProperties;
 import br.usp.ia.properties.SelectionProperties;
 import org.springframework.beans.factory.BeanFactory;

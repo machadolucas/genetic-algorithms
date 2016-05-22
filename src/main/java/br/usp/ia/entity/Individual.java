@@ -1,8 +1,8 @@
 package br.usp.ia.entity;
 
-import java.util.Arrays;
-
 import br.usp.ia.logic.fitness.FitnessFunction;
+
+import java.util.Arrays;
 
 public class Individual {
 

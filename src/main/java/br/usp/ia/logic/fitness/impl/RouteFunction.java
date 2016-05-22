@@ -1,12 +1,11 @@
 package br.usp.ia.logic.fitness.impl;
 
-import org.springframework.stereotype.Component;
-
 import br.usp.ia.entity.Individual;
 import br.usp.ia.logic.fitness.FitnessFunction;
+import org.springframework.stereotype.Component;
 
 @Component
-public class RouteFunction implements FitnessFunction {
+public class RouteFunction extends FitnessFunction {
 
     @Override
     public double calculate(final Individual individual) {
