@@ -1,11 +1,8 @@
 package br.usp.ia.logging.impl;
 
-import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.stereotype.Component;
-
 import br.usp.ia.logging.Logging;
-import br.usp.ia.logic.fitness.FitnessFunction;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j(topic = "resultsFile")
@@ -13,8 +10,8 @@ public class CVSFileLogging implements Logging {
 
     @Override
     public void fitnessProgress(final int generation, final int generationScreenSkip, final double populationTotal,
-            final double populationAvg, final double max, final double min, FitnessFunction fitnessFunction) {
-        String inverse = "";
+                                final double populationAvg, final double max, final double min) {
+        final String inverse = "";
         log.info("{}\t{}\t{}\t{}\t{}", generation, //
                 String.format(inverse + "%.3f", populationTotal), //
                 String.format(inverse + "%.3f", populationAvg), //

@@ -1,9 +1,16 @@
 package br.usp.ia.logic.fitness;
 
 import br.usp.ia.entity.Individual;
+import br.usp.ia.entity.TestInstance;
+import lombok.Getter;
+import lombok.Setter;
 
-public interface FitnessFunction {
+public abstract class FitnessFunction {
 
-    double calculate(Individual individual);
+    @Getter
+    @Setter
+    private TestInstance testInstance;
+
+    public abstract double calculate(Individual individual);
 
 }

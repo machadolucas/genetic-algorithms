@@ -1,40 +1,41 @@
 package br.usp.ia.logic;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import br.usp.ia.entity.Individual;
 import br.usp.ia.entity.Population;
+import br.usp.ia.entity.TestInstance;
 import br.usp.ia.logging.impl.CVSLogging;
 import br.usp.ia.logic.crossover.Crossover;
 import br.usp.ia.logic.fitness.FitnessFunction;
 import br.usp.ia.logic.fitness.impl.RouteFunction;
 import br.usp.ia.logic.mutation.Mutation;
 import br.usp.ia.logic.selection.Selection;
-import br.usp.ia.properties.CrossoverProperties;
-import br.usp.ia.properties.ExecutionProperties;
-import br.usp.ia.properties.FitnessProperties;
-import br.usp.ia.properties.MutationProperties;
-import br.usp.ia.properties.SelectionProperties;
+import br.usp.ia.properties.*;
 import br.usp.ia.util.KMeansConvergence;
 import br.usp.ia.util.Random;
 import br.usp.ia.util.StrategySolver;
+import br.usp.ia.util.TestInstanceParser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import java.util.LinkedList;
+import java.util.List;
 
 @Component
 public class GAAlgorithm {
 
     //====== Realiza logging da execucao
     @Autowired
-    CVSLogging logging;
+    private CVSLogging logging;
 
     //====== Criador de dados aleatorios
     @Autowired
     private Random random;
+
+    //====== Leitor do arquivo de instancia de teste CVRP
+    @Autowired
+    private TestInstanceParser testInstanceParser;
 
     //====== Calcula se ha convergencia numa populacao por k-means
     @Autowired
@@ -52,6 +53,9 @@ public class GAAlgorithm {
     @Autowired
     private FitnessProperties fitnessProperties;
 
+    @Value("${testName}")
+    private String testFileName;
+
     //====== Resolvedor de algoritmos a partir das propriedades de execucao
     @Autowired
     private StrategySolver strategySolver;
@@ -61,11 +65,15 @@ public class GAAlgorithm {
     private Crossover crossover;
     private Mutation mutation;
     private Selection selection;
+    private TestInstance testInstance;
 
     //Inicializa quais algoritmos deve usar baseado nas propriedades
     @PostConstruct
     private void initializeAlgorithms() {
+        this.testInstance = loadTestInstance(this.testFileName);
+
         this.fitnessFunction = new RouteFunction();
+        this.fitnessFunction.setTestInstance(this.testInstance);
         this.crossover = this.strategySolver.getCrossover(this.crossoverProperties);
         this.mutation = this.strategySolver.getMutation(this.mutationProperties);
         this.selection = this.strategySolver.getSelection(this.selectionProperties);
@@ -78,7 +86,7 @@ public class GAAlgorithm {
     public void progressAlgorithm() {
 
         //Imprime no arquivo e na tela os parametros de inicializacao do algoritmo
-        this.logging.print(this.fitnessProperties.toString());
+        this.logging.print(this.testInstance.toString());
         this.logging.print(this.crossoverProperties.toString());
         this.logging.print(this.mutationProperties.toString());
         this.logging.print(this.selectionProperties.toString());
@@ -215,7 +223,6 @@ public class GAAlgorithm {
 
     }
 
-
     private Population initializeRandomPopulation(final int size, final FitnessFunction fitnessFunction) {
         final List<Individual> individuals = new LinkedList<>();
         for (int i = 0; i < size; i++) {
@@ -223,5 +230,10 @@ public class GAAlgorithm {
             individuals.add(individual);
         }
         return new Population(individuals);
+    }
+
+
+    private TestInstance loadTestInstance(final String testFileName) {
+        return this.testInstanceParser.parse("tests/" + testFileName + ".vrp");
     }
 }
