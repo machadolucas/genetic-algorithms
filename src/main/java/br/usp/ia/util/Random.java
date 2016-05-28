@@ -6,7 +6,7 @@ import it.unimi.dsi.util.XorShift1024StarRandom;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedHashSet;
+import java.util.*;
 
 @Data
 @Component
@@ -29,23 +29,34 @@ public class Random {
 
         final Integer[] chromosome = new Integer[nodesAmount + trucksAmount - depotsAmount];
 
-        final LinkedHashSet<Integer> generated = new LinkedHashSet<>();
-        // Como estamos adicionando num Set, ele vai gerar todos os numeros sem repeticao ate preencher tudo
-        while (generated.size() < nodesAmount + trucksAmount - depotsAmount) {
-
-            final Integer next = this.uniformGenerator.nextInt(nodesAmount + trucksAmount) + 1;
-
-            //Se for zero ou um deposito, continua e gera outro
-            if (next.equals(0) || fitnessFunction.getTestInstance().getDepotSections().contains(next)) {
+        // Cria uma lista de 1 ate nodesAmount, pulando os nodes que sao depositos
+        final List<Integer> generated = new ArrayList<>();
+        for (int amount = 1; amount <= nodesAmount + depotsAmount; amount++) {
+            if (fitnessFunction.getTestInstance().getDepotSections().contains(amount)) {
                 continue;
             }
-            generated.add(next);
+            generated.add(amount);
         }
 
+        // Embaralha aleatoriamente os nodes
+        Collections.shuffle(generated, this.uniformGenerator);
+
+        // Aleatoriamente gera pontos de corte para inserir os marcadores de trucks
+        final Set<Integer> cutPoints = new HashSet<>();
+        while (cutPoints.size() < trucksAmount - 1) {
+            final Integer nextCut = this.uniformGenerator.nextInt(chromosome.length);
+            cutPoints.add(nextCut);
+        }
+
+        // Cria o cromossomo com os numeros gerados, intercalando com os cortes para marcadores de trucks
         int i = 0;
-        for (final Integer number : generated) {
-            chromosome[i] = number;
-            i++;
+        for (int chromosomeIndex = 0; chromosomeIndex < chromosome.length; chromosomeIndex++) {
+            if (cutPoints.contains(chromosomeIndex)) {
+                chromosome[chromosomeIndex] = 0;
+            } else {
+                chromosome[chromosomeIndex] = generated.get(i);
+                i++;
+            }
         }
 
         return new Individual(chromosome);
