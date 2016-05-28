@@ -70,7 +70,7 @@ public class RouteFunction extends FitnessFunction {
      * @param anotherNode
      * @return
      */
-    Integer distanceBetween(final List<Double> oneNode, final List<Double> anotherNode) {
+    private Integer distanceBetween(final List<Double> oneNode, final List<Double> anotherNode) {
         Integer distance = null;
 
         switch (getTestInstance().getEdgeWeightType()) {

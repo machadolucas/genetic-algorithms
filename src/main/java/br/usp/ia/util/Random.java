@@ -29,12 +29,9 @@ public class Random {
 
         final Integer[] chromosome = new Integer[nodesAmount + trucksAmount - depotsAmount];
 
-        // Cria uma lista de 1 ate nodesAmount, pulando os nodes que sao depositos
+        // Cria uma lista de 2 ate nodesAmount + depotsAmount, pulando o node deposito (1)
         final List<Integer> generated = new ArrayList<>();
-        for (int amount = 1; amount <= nodesAmount + depotsAmount; amount++) {
-            if (fitnessFunction.getTestInstance().getDepotSections().contains(amount)) {
-                continue;
-            }
+        for (int amount = 2; amount <= nodesAmount + depotsAmount; amount++) {
             generated.add(amount);
         }
 
