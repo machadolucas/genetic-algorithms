@@ -69,26 +69,20 @@ public class Individual {
 
     public Map<Integer, List<Integer>> getObjectRepresentation(final FitnessFunction fitnessFunction) {
         final Map<Integer, List<Integer>> objectRepresentation = new HashMap<>();
-        final int nodesAmount = fitnessFunction.getTestInstance().getDimension();
-        final int trucksAmount = fitnessFunction.getTestInstance().getTrucks();
 
+        int truckNumber = 1;
         List<Integer> path = new LinkedList<>();
         for (final int geneValue : this.chromosome) {
-            if (geneValue <= nodesAmount) {
+            if (geneValue != 0) {
                 path.add(geneValue);
             } else {
-                objectRepresentation.put(geneValue - nodesAmount, new LinkedList<>(path));
+                objectRepresentation.put(truckNumber, new LinkedList<>(path));
                 path = new LinkedList<>();
+                truckNumber++;
             }
         }
         //Pegar a ultima lista gerada e adicionar o ultimo caminhao
-        for (int i = 1; i <= trucksAmount; i++) {
-            final int truckNumber = i + nodesAmount;
-            if (objectRepresentation.get(i) == null) {
-                objectRepresentation.put(truckNumber - nodesAmount, new LinkedList<>(path));
-                break;
-            }
-        }
+        objectRepresentation.put(truckNumber, new LinkedList<>(path));
 
         return objectRepresentation;
     }
