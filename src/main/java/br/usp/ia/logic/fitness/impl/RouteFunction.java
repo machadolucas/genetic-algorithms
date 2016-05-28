@@ -13,9 +13,6 @@ public class RouteFunction extends FitnessFunction {
     @Override
     public int calculate(final Individual individual) {
 
-        final int nodesAmount = getTestInstance().getDimension();
-        final int trucksAmount = getTestInstance().getTrucks();
-
         final Map<Integer, List<Integer>> objectRepresentation = individual.getObjectRepresentation(this);
         final List<List<Double>> coords = getTestInstance().getCoords();
         final List<Double> depotCoords = coords.get(0);
@@ -25,12 +22,14 @@ public class RouteFunction extends FitnessFunction {
             final List<Integer> path = entry.getValue();
             int pathDistance = 0;
             if (path.size() > 0) {
-                final int outOfDepotDistance = distanceBetween(depotCoords, coords.get(path.get(0)));
+                final int outOfDepotDistance = distanceBetween(depotCoords, coords.get(path.get(0) - 1));
                 pathDistance += outOfDepotDistance;
                 for (int i = 0; i < path.size() - 1; i++) {
-                    pathDistance += distanceBetween(coords.get(path.get(i)), coords.get(path.get(i + 1)));
+                    final Integer currentNode = path.get(i);
+                    final Integer nextNode = path.get(i + 1);
+                    pathDistance += distanceBetween(coords.get(currentNode - 1), coords.get(nextNode - 1));
                 }
-                final int backToDepotDistance = distanceBetween(coords.get(path.get(path.size() - 1)), depotCoords);
+                final int backToDepotDistance = distanceBetween(coords.get(path.get(path.size() - 1) - 1), depotCoords);
                 pathDistance += backToDepotDistance;
             }
 

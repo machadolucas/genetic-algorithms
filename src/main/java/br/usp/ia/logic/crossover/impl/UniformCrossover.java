@@ -19,8 +19,8 @@ public class UniformCrossover implements Crossover {
     public List<Individual> doCrossover(final Individual father, final Individual mother) {
 
         //Inicializa cromossomo dos filhos
-        final int[] son1 = new int[father.getChromosomeLength()];
-        final int[] son2 = new int[father.getChromosomeLength()];
+        final Integer[] son1 = new Integer[father.getChromosomeLength()];
+        final Integer[] son2 = new Integer[father.getChromosomeLength()];
 
         // Preenche filhos
         for (int i = 0; i < father.getChromosomeLength(); i++) {

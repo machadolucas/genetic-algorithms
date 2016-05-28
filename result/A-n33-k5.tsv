@@ -1,0 +1,20 @@
+{"TestInstance":{"name":"A-n33-k5","comment":"(Augerat et al, Min no of trucks: 5, Optimal value: 661)","type":"CVRP","dimension":"33","edgeWeightType":"EUC_2D","capacity":"100","coords":"[[42.0, 68.0], [77.0, 97.0], [28.0, 64.0], [77.0, 39.0], [32.0, 33.0], [32.0, 8.0], [42.0, 92.0], [8.0, 3.0], [7.0, 14.0], [82.0, 17.0], [48.0, 13.0], [53.0, 82.0], [39.0, 27.0], [7.0, 24.0], [67.0, 98.0], [54.0, 52.0], [72.0, 43.0], [73.0, 3.0], [59.0, 77.0], [58.0, 97.0], [23.0, 43.0], [68.0, 98.0], [47.0, 62.0], [52.0, 72.0], [32.0, 88.0], [39.0, 7.0], [17.0, 8.0], [38.0, 7.0], [58.0, 74.0], [82.0, 67.0], [42.0, 7.0], [68.0, 82.0], [7.0, 48.0]]","demands":"[0, 5, 23, 14, 13, 8, 18, 19, 10, 18, 20, 5, 9, 23, 9, 18, 10, 24, 13, 14, 8, 10, 19, 14, 13, 14, 2, 23, 15, 8, 20, 24, 3]","depotSections":"[1]"}} 
+{"CrossoverProperties":{"energy":"0.4","strategy":"ONE_POINT"}} 
+{"MutationProperties":{"energy":"0.01","strategy":"SIMPLE"}} 
+{"SelectionProperties":{"elitism":"true","strategy":"ROULETTE"}} 
+{"ExecutionProperties":{"populationSize":"40","generationsToLogOnScreenInterval":"50","stopStrategy":"NUMBER_OF_GENERATIONS","maxNumberOfGenerations":"10","populationChangeStrategy":"COMPLETE_REPLACEMENT"}} 
+1	71852	1796,300	2008	1537 
+2	69532	1738,300	1968	1309 
+3	66466	1661,650	1893	1094 
+4	60560	1514,000	1906	994 
+5	55214	1380,350	1779	994 
+6	51186	1279,650	1884	994 
+7	47625	1190,625	1595	715 
+8	45997	1149,925	1588	338 
+9	40279	1006,975	1626	338 
+10	29989	749,725	1526	338 
+ 
+Melhor individuo da ultima geracao: 
+[8, 13, 14, 7, 16, 36, 30, 4, 32, 35, 25, 27, 19, 23, 5, 36, 32, 17, 27, 6, 4, 24, 21, 22, 35, 20, 35, 10, 16, 11, 36, 19, 21, 35, 24, 12] 
+ 
+Tempo total de execucao (ms): 85 

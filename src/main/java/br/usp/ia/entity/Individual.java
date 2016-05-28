@@ -6,7 +6,7 @@ import java.util.*;
 
 public class Individual {
 
-    private final int[] chromosome;
+    private final Integer[] chromosome;
 
     private Integer fitness;
 
@@ -15,7 +15,7 @@ public class Individual {
      *
      * @param chromosome
      */
-    public Individual(final int[] chromosome) {
+    public Individual(final Integer[] chromosome) {
         this.chromosome = chromosome;
     }
 
@@ -23,7 +23,7 @@ public class Individual {
      * @param index indice
      * @return o valor do gene no indice especificado
      */
-    public int getGene(final int index) {
+    public Integer getGene(final int index) {
         return this.chromosome[index];
     }
 
@@ -38,7 +38,7 @@ public class Individual {
         this.fitness = null;
     }
 
-    public int[] getChromosome() {
+    public Integer[] getChromosome() {
         return this.chromosome;
     }
 
@@ -61,7 +61,7 @@ public class Individual {
     }
 
     /**
-     * @return a representacao binaria do cromossomo
+     * @return a representacao do cromossomo como texto (array)
      */
     public String toString(final FitnessFunction fitnessFunction) {
         return Arrays.toString(this.chromosome);
@@ -70,6 +70,7 @@ public class Individual {
     public Map<Integer, List<Integer>> getObjectRepresentation(final FitnessFunction fitnessFunction) {
         final Map<Integer, List<Integer>> objectRepresentation = new HashMap<>();
         final int nodesAmount = fitnessFunction.getTestInstance().getDimension();
+        final int trucksAmount = fitnessFunction.getTestInstance().getTrucks();
 
         List<Integer> path = new LinkedList<>();
         for (final int geneValue : this.chromosome) {
@@ -79,7 +80,14 @@ public class Individual {
                 objectRepresentation.put(geneValue - nodesAmount, new LinkedList<>(path));
                 path = new LinkedList<>();
             }
-            //Pegar a ultima lista gerada e adicionar o ultimo caminhao
+        }
+        //Pegar a ultima lista gerada e adicionar o ultimo caminhao
+        for (int i = 1; i <= trucksAmount; i++) {
+            final int truckNumber = i + nodesAmount;
+            if (objectRepresentation.get(i) == null) {
+                objectRepresentation.put(truckNumber - nodesAmount, new LinkedList<>(path));
+                break;
+            }
         }
 
         return objectRepresentation;
