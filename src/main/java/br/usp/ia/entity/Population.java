@@ -22,7 +22,7 @@ public class Population {
                         individual2.getFitness(fitnessFunction))).get();
     }
 
-    public double getMaxFitness(final FitnessFunction fitnessFunction) {
+    public Integer getMaxFitness(final FitnessFunction fitnessFunction) {
         // Obtem na populacao, o valor do individuo com maximo fitness
         return this.individuals.stream().max((individual1, individual2) -> //
                 Integer.compare(individual1.getFitness(fitnessFunction), //
@@ -30,7 +30,7 @@ public class Population {
                 .get().getFitness(fitnessFunction);
     }
 
-    public double getMinFitness(final FitnessFunction fitnessFunction) {
+    public Integer getMinFitness(final FitnessFunction fitnessFunction) {
         // Obtem na populacao, o valor do individuo com minimo fitness
         return this.individuals.stream().min((individual1, individual2) -> //
                 Integer.compare(individual1.getFitness(fitnessFunction), //
@@ -44,7 +44,7 @@ public class Population {
                 individual.getFitness(fitnessFunction)).average().getAsDouble();
     }
 
-    public double getTotalFitness(final FitnessFunction fitnessFunction) {
+    public Integer getTotalFitness(final FitnessFunction fitnessFunction) {
         // Obtem na populacao, o valor da soma do fitness dos individuos
         return this.individuals.stream().mapToInt(individual -> //
                 individual.getFitness(fitnessFunction)).sum();

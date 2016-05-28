@@ -21,8 +21,8 @@ public class OnePointCrossover implements Crossover {
         final int cutPosition = this.random.getUniformGenerator().nextInt(father.getChromosomeLength());
 
         //Inicializa cromossomo dos filhos
-        final int[] son1 = new int[father.getChromosomeLength()];
-        final int[] son2 = new int[father.getChromosomeLength()];
+        final Integer[] son1 = new Integer[father.getChromosomeLength()];
+        final Integer[] son2 = new Integer[father.getChromosomeLength()];
 
         //Preenche filhos ate a posicao de corte
         for (int i = 0; i < cutPosition; i++) {

@@ -27,7 +27,7 @@ public class Random {
         final int nodesAmount = fitnessFunction.getTestInstance().getDimension() - depotsAmount;
         final int trucksAmount = fitnessFunction.getTestInstance().getTrucks();
 
-        final int[] chromosome = new int[nodesAmount + trucksAmount - depotsAmount];
+        final Integer[] chromosome = new Integer[nodesAmount + trucksAmount - depotsAmount];
 
         final LinkedHashSet<Integer> generated = new LinkedHashSet<>();
         // Como estamos adicionando num Set, ele vai gerar todos os numeros sem repeticao ate preencher tudo
@@ -35,8 +35,8 @@ public class Random {
 
             final Integer next = this.uniformGenerator.nextInt(nodesAmount + trucksAmount) + 1;
 
-            //Se for um deposito, continua e gera outro
-            if (fitnessFunction.getTestInstance().getDepotSections().contains(next)) {
+            //Se for zero ou um deposito, continua e gera outro
+            if (next.equals(0) || fitnessFunction.getTestInstance().getDepotSections().contains(next)) {
                 continue;
             }
             generated.add(next);

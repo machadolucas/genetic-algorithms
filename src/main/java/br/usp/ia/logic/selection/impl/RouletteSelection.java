@@ -36,17 +36,9 @@ public class RouletteSelection implements Selection {
     public List<Individual> selectInPopulation(final Population population, final int selectionsAmount, final
     FitnessFunction fitnessFunction) {
 
-        // Obtem o valor minimo de fitness da populacao
-        final double minFitness = population.getMinFitness(fitnessFunction);
-
         final double maxFitness;
-        if (minFitness > 0) {
-            // Obtem o valor maximo de fitness da populacao
-            maxFitness = population.getBest(fitnessFunction).getFitness(fitnessFunction);
-        } else {
-            // Obtem o valor maximo de fitness da populacao, normalizado com o minimo negativo
-            maxFitness = population.getBest(fitnessFunction).getFitness(fitnessFunction) + (-minFitness) + 0.0001;
-        }
+        // Obtem o valor maximo de fitness da populacao
+        maxFitness = population.getMaxFitness(fitnessFunction);
 
         // Cada posicao desse array guarda quantas vezes cada individuo foi selecionado
         final int[] selections = new int[population.size()];
@@ -60,15 +52,10 @@ public class RouletteSelection implements Selection {
                 //Ate escolher alguem, calcula aleatoriamente pelo fitness/maxFitness
                 index = this.random.getUniformGenerator().nextInt(population.size());
                 final double fitness;
-                if (minFitness > 0) {
                     // Valor de fitness do individuo
                     fitness = population.getIndividuals().get(index).getFitness(fitnessFunction);
-                } else {
-                    // Valor de fitness do individuo normalizado com o minimo negativo
-                    fitness = population.getIndividuals().get(index).getFitness(fitnessFunction) //
-                            + (-minFitness) + 0.0001;
-                }
-                if (this.random.getUniformGenerator().nextDouble() < //
+                // TODO Mudei de < para >= pois problema é minimizar o fitness. Isso inverte a probabilidade
+                if (this.random.getUniformGenerator().nextDouble() >=
                         fitness / maxFitness) {
                     accepted = true;
                 }
