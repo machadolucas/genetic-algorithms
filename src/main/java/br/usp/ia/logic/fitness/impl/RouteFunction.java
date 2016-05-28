@@ -16,27 +16,51 @@ public class RouteFunction extends FitnessFunction {
         final Map<Integer, List<Integer>> objectRepresentation = individual.getObjectRepresentation(this);
         final List<List<Double>> coords = getTestInstance().getCoords();
         final List<Double> depotCoords = coords.get(0);
+        final List<Integer> demands = getTestInstance().getDemands();
 
         int totalDistances = 0;
+        int overCapacities = 0;
+
+        // Para cada rota de caminhoes (Lista de nodes para o id do caminhao)
         for (final Map.Entry<Integer, List<Integer>> entry : objectRepresentation.entrySet()) {
             final List<Integer> path = entry.getValue();
             int pathDistance = 0;
+            int pathDemand = 0;
+
+            // Se o caminho tiver nodes
             if (path.size() > 0) {
+
+                // Calcula e soma distancia entre o depot e o primeiro node
                 final int outOfDepotDistance = distanceBetween(depotCoords, coords.get(path.get(0) - 1));
                 pathDistance += outOfDepotDistance;
+
+                // Calcula e soma distancias entre os nodes
                 for (int i = 0; i < path.size() - 1; i++) {
                     final Integer currentNode = path.get(i);
                     final Integer nextNode = path.get(i + 1);
                     pathDistance += distanceBetween(coords.get(currentNode - 1), coords.get(nextNode - 1));
+                    pathDemand += demands.get(currentNode - 1);
                 }
+
+                // Calcula e soma distancia entre o ultimo node e o depot de volta
                 final int backToDepotDistance = distanceBetween(coords.get(path.get(path.size() - 1) - 1), depotCoords);
                 pathDistance += backToDepotDistance;
+                pathDemand += demands.get(path.get(path.size() - 1) - 1);
+
+                //Contador de overcapacity
+                if (pathDemand > getTestInstance().getCapacity()) {
+                    overCapacities++;
+                }
             }
 
             totalDistances += pathDistance;
         }
 
-        return totalDistances;
+        // Peso para cada overcapacity
+        final int overCapacityWeight = 10000000;
+
+        // Fitness eh a soma das distancias, mais o peso de overcapacity
+        return totalDistances + (overCapacityWeight * overCapacities);
     }
 
     /**
