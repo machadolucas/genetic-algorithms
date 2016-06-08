@@ -1,5 +1,14 @@
 package br.usp.ia.logic;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import br.usp.ia.entity.Individual;
 import br.usp.ia.entity.Population;
 import br.usp.ia.entity.TestInstance;
@@ -9,18 +18,15 @@ import br.usp.ia.logic.fitness.FitnessFunction;
 import br.usp.ia.logic.fitness.impl.RouteFunction;
 import br.usp.ia.logic.mutation.Mutation;
 import br.usp.ia.logic.selection.Selection;
-import br.usp.ia.properties.*;
+import br.usp.ia.properties.CrossoverProperties;
+import br.usp.ia.properties.ExecutionProperties;
+import br.usp.ia.properties.FitnessProperties;
+import br.usp.ia.properties.MutationProperties;
+import br.usp.ia.properties.SelectionProperties;
 import br.usp.ia.util.KMeansConvergence;
 import br.usp.ia.util.Random;
 import br.usp.ia.util.StrategySolver;
 import br.usp.ia.util.TestInstanceParser;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
-import java.util.LinkedList;
-import java.util.List;
 
 @Component
 public class GAAlgorithm {
@@ -200,7 +206,8 @@ public class GAAlgorithm {
 
         //Aplica operador de mutacao em toda a nova geracao
         newGeneration.getIndividuals().forEach( //
-                individual -> this.mutation.mutate(individual, this.mutationProperties.getEnergy()));
+                individual -> this.mutation.mutate(individual, this.mutationProperties.getEnergy(),
+                        this.fitnessFunction));
 
         //Faz a troca da populacao de acordo com o criterio
         switch (this.executionProperties.getPopulationChangeStrategy()) {
