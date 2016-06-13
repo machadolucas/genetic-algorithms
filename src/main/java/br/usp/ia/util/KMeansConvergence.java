@@ -37,7 +37,7 @@ public class KMeansConvergence {
         // Gera k centroides aleatoriamente.
         final List<Individual> centroids = new LinkedList<>();
         for (int i = 0; i < k; i++) {
-            centroids.add(this.random.nextBinaryIndividual(fitnessFunction));
+            centroids.add(this.random.nextRandomIndividual(fitnessFunction));
         }
 
         // Clusters: centroide e lista de pontos
@@ -75,8 +75,8 @@ public class KMeansConvergence {
                 final int amountOfIndividuals = clusterIndividuals.size();
 
                 if (amountOfIndividuals > 0) {
-                    double sumX = 0;
-                    double sumY = 0;
+                    final double sumX = 0;
+                    final double sumY = 0;
                     for (final Individual individual : clusterIndividuals) {
 //                        sumX += individual.getXDoubleRepresentation(fitnessFunction);
 //                        sumY += individual.getYDoubleRepresentation(fitnessFunction);

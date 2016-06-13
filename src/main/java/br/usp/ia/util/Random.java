@@ -22,7 +22,7 @@ public class Random {
     /**
      * @return um novo individuo com um cromossomo aleatorio
      */
-    public Individual nextBinaryIndividual(final FitnessFunction fitnessFunction) {
+    public Individual nextRandomIndividual(final FitnessFunction fitnessFunction) {
         final int depotsAmount = fitnessFunction.getTestInstance().getDepotSections().size();
         final int nodesAmount = fitnessFunction.getTestInstance().getDimension() - depotsAmount;
         final int trucksAmount = fitnessFunction.getTestInstance().getTrucks();
