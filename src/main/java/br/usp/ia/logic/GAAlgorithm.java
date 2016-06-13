@@ -1,32 +1,25 @@
 package br.usp.ia.logic;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import br.usp.ia.entity.Individual;
 import br.usp.ia.entity.Population;
 import br.usp.ia.entity.TestInstance;
 import br.usp.ia.logging.impl.CVSLogging;
+import br.usp.ia.logic.correction.Correction;
+import br.usp.ia.logic.correction.impl.GeneRepair;
 import br.usp.ia.logic.crossover.Crossover;
 import br.usp.ia.logic.fitness.FitnessFunction;
 import br.usp.ia.logic.fitness.impl.RouteFunction;
 import br.usp.ia.logic.mutation.Mutation;
 import br.usp.ia.logic.selection.Selection;
-import br.usp.ia.properties.CrossoverProperties;
-import br.usp.ia.properties.ExecutionProperties;
-import br.usp.ia.properties.FitnessProperties;
-import br.usp.ia.properties.MutationProperties;
-import br.usp.ia.properties.SelectionProperties;
-import br.usp.ia.util.KMeansConvergence;
-import br.usp.ia.util.Random;
-import br.usp.ia.util.StrategySolver;
-import br.usp.ia.util.TestInstanceParser;
+import br.usp.ia.properties.*;
+import br.usp.ia.util.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import java.util.LinkedList;
+import java.util.List;
 
 @Component
 public class GAAlgorithm {
@@ -71,6 +64,7 @@ public class GAAlgorithm {
     private Crossover crossover;
     private Mutation mutation;
     private Selection selection;
+    private Correction correction;
     private TestInstance testInstance;
 
     //Inicializa quais algoritmos deve usar baseado nas propriedades
@@ -83,6 +77,7 @@ public class GAAlgorithm {
         this.crossover = this.strategySolver.getCrossover(this.crossoverProperties);
         this.mutation = this.strategySolver.getMutation(this.mutationProperties);
         this.selection = this.strategySolver.getSelection(this.selectionProperties);
+        this.correction = new GeneRepair();
     }
 
     /**
@@ -209,6 +204,18 @@ public class GAAlgorithm {
                 individual -> this.mutation.mutate(individual, this.mutationProperties.getEnergy(),
                         this.fitnessFunction));
 
+        //Itera populacao e aplica operador de correcao se necessario
+        newGeneration.getIndividuals().forEach( //
+                individual -> {
+                    final SolutionValidator validator = new SolutionValidator(individual, this.fitnessFunction);
+                    //Se a solucao nao for valida, aplica o operador de correcao
+                    if (!validator.isValid()) {
+                        individual = this.correction.correct(individual, this.fitnessFunction, //
+                                validator.getErrorSet(), validator.getMissingSet());
+                    }
+                });
+
+
         //Faz a troca da populacao de acordo com o criterio
         switch (this.executionProperties.getPopulationChangeStrategy()) {
             case MU_PLUS_LAMBDA:
@@ -233,7 +240,7 @@ public class GAAlgorithm {
     private Population initializeRandomPopulation(final int size, final FitnessFunction fitnessFunction) {
         final List<Individual> individuals = new LinkedList<>();
         for (int i = 0; i < size; i++) {
-            final Individual individual = this.random.nextBinaryIndividual(fitnessFunction);
+            final Individual individual = this.random.nextRandomIndividual(fitnessFunction);
             individuals.add(individual);
         }
         return new Population(individuals);
