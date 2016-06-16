@@ -15,10 +15,10 @@ import br.usp.ia.util.Random;
 public class GeneRepair implements Correction {
 
     @Autowired
-    private Random random;
+    private Random random = new Random();
 
     @Override
-    public Individual correct(final Individual individual, final FitnessFunction fitnessFunction,
+    public void correct(final Individual individual, final FitnessFunction fitnessFunction,
             final List<Integer> missingList, final List<Integer> errorList) {
 
         //Gera um template aleatoria para ser usado na correcao
@@ -46,7 +46,5 @@ public class GeneRepair implements Correction {
                 break;
             }
         }
-
-        return individual;
     }
 }
