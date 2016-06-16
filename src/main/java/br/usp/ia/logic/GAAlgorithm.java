@@ -214,16 +214,18 @@ public class GAAlgorithm {
                 individual -> this.mutation.mutate(individual, this.mutationProperties.getEnergy(),
                         this.fitnessFunction));
 
-        //Itera populacao e aplica operador de correcao se necessario
-        newGeneration.getIndividuals().forEach( //
-                individual -> {
-                    final SolutionValidator validator = new SolutionValidator(individual, this.fitnessFunction);
-                    //Se a solucao nao for valida, aplica o operador de correcao
-                    if (!validator.isValid()) {
-                        individual = this.correction.correct(individual, this.fitnessFunction, //
-                                validator.getErrorList(), validator.getMissingList());
-                    }
-                });
+        if (this.executionProperties.isUseCorrection()) {
+            // Itera populacao e aplica operador de correcao se necessario
+            newGeneration.getIndividuals().forEach( //
+                    individual -> {
+                        final SolutionValidator validator = new SolutionValidator(individual, this.fitnessFunction);
+                        // Se a solucao nao for valida, aplica o operador de correcao
+                        if (!validator.isValid()) {
+                            this.correction.correct(individual, this.fitnessFunction, //
+                                    validator.getMissingList(), validator.getErrorList());
+                        }
+                    });
+        }
 
 
         //Faz a troca da populacao de acordo com o criterio

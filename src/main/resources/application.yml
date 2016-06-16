@@ -4,14 +4,15 @@ algorithm:
       strategy: roulette
       elitism: true
     crossover:
-      strategy: one_point
+      strategy: two_point
       energy: 0.4
     mutation:
       strategy: simple
       energy: 0.01
     execution:
-      population-size: 40
+      population-size: 10
       generations-to-log-on-screen-interval: 50
-      max-number-of-generations: 10
+      max-number-of-generations: 200
       stop-strategy: number_of_generations
       population-change-strategy: complete_replacement
+      use-correction: true

@@ -7,7 +7,7 @@ import br.usp.ia.logic.fitness.FitnessFunction;
 
 public interface Correction {
 
-    Individual correct(Individual individual, FitnessFunction fitnessFunction, List<Integer> missingList,
+    void correct(Individual individual, FitnessFunction fitnessFunction, List<Integer> missingList,
             List<Integer> errorList);
 
 }
