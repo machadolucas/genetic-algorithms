@@ -7,10 +7,10 @@ algorithm:
       strategy: pmx
       energy: 0.4
     mutation:
-      strategy: simple
+      strategy: exchange
       energy: 0.01
     execution:
-      population-size: 10
+      population-size: 40
       generations-to-log-on-screen-interval: 50
       max-number-of-generations: 200
       stop-strategy: number_of_generations
