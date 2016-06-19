@@ -27,7 +27,8 @@ public class CrossoverProperties {
 
     @AllArgsConstructor
     public enum CrossoverStrategy {
-        ONE_POINT("onePointCrossover"), TWO_POINT("twoPointCrossover"), UNIFORM("uniformCrossover");
+        ONE_POINT("onePointCrossover"), TWO_POINT("twoPointCrossover"), UNIFORM("uniformCrossover"), PMX
+                ("PMXCrossover");
 
         @Getter
         @Setter
