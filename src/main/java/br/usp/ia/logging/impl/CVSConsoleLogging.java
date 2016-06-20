@@ -9,11 +9,15 @@ import org.springframework.stereotype.Component;
 public class CVSConsoleLogging implements Logging {
 
     @Override
-    public void fitnessProgress(final int generation, final int generationScreenSkip, final double populationTotal,
-                                final double populationAvg, final double max, final double min) {
+    public void fitnessProgress(final int generation, final int generationScreenSkip, final Integer populationTotal,
+                                final double populationAvg, final Integer max, final Integer min) {
         if (generation <= 25 || generation % generationScreenSkip == 0) {
-            log.info("Geracao:{},\tTotal:{},\tAvg:{},\tMax:{},\tMin:{}", //
-                    generation, populationTotal, populationAvg, max, min);
+            log.info("Geracao:{}\tTotal:{}\tAvg:{}\tMax:{}\tMin:{}", //
+                    generation, //
+                    String.format("%d", populationTotal), //
+                    String.format("%.3f", populationAvg), //
+                    String.format("%d", max), //
+                    String.format("%d", min));
         }
     }
 

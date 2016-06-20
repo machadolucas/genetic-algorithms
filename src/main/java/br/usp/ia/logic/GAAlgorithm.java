@@ -1,32 +1,54 @@
 package br.usp.ia.logic;
 
-import br.usp.ia.entity.Individual;
-import br.usp.ia.entity.Population;
-import br.usp.ia.logging.impl.CVSLogging;
-import br.usp.ia.logic.crossover.Crossover;
-import br.usp.ia.logic.fitness.FitnessFunction;
-import br.usp.ia.logic.mutation.Mutation;
-import br.usp.ia.logic.selection.Selection;
-import br.usp.ia.properties.*;
-import br.usp.ia.util.Random;
-import br.usp.ia.util.StrategySolver;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import br.usp.ia.entity.Individual;
+import br.usp.ia.entity.Population;
+import br.usp.ia.entity.TestInstance;
+import br.usp.ia.logging.impl.CVSLogging;
+import br.usp.ia.logic.correction.Correction;
+import br.usp.ia.logic.correction.impl.GeneRepair;
+import br.usp.ia.logic.crossover.Crossover;
+import br.usp.ia.logic.fitness.FitnessFunction;
+import br.usp.ia.logic.fitness.impl.RouteFunction;
+import br.usp.ia.logic.mutation.Mutation;
+import br.usp.ia.logic.selection.Selection;
+import br.usp.ia.properties.CrossoverProperties;
+import br.usp.ia.properties.ExecutionProperties;
+import br.usp.ia.properties.FitnessProperties;
+import br.usp.ia.properties.MutationProperties;
+import br.usp.ia.properties.SelectionProperties;
+import br.usp.ia.util.KMeansConvergence;
+import br.usp.ia.util.Random;
+import br.usp.ia.util.SolutionValidator;
+import br.usp.ia.util.StrategySolver;
+import br.usp.ia.util.TestInstanceParser;
 
 @Component
 public class GAAlgorithm {
 
     //====== Realiza logging da execucao
     @Autowired
-    CVSLogging logging;
+    private CVSLogging logging;
 
     //====== Criador de dados aleatorios
     @Autowired
     private Random random;
+
+    //====== Leitor do arquivo de instancia de teste CVRP
+    @Autowired
+    private TestInstanceParser testInstanceParser;
+
+    //====== Calcula se ha convergencia numa populacao por k-means
+    @Autowired
+    private KMeansConvergence kMeansConvergence;
 
     //====== Propriedades da instancia de execucao
     @Autowired
@@ -40,6 +62,9 @@ public class GAAlgorithm {
     @Autowired
     private FitnessProperties fitnessProperties;
 
+    @Value("${testName}")
+    private String testFileName;
+
     //====== Resolvedor de algoritmos a partir das propriedades de execucao
     @Autowired
     private StrategySolver strategySolver;
@@ -49,14 +74,20 @@ public class GAAlgorithm {
     private Crossover crossover;
     private Mutation mutation;
     private Selection selection;
+    private Correction correction;
+    private TestInstance testInstance;
 
     //Inicializa quais algoritmos deve usar baseado nas propriedades
     @PostConstruct
     private void initializeAlgorithms() {
-        this.fitnessFunction = this.strategySolver.getFitnessFunction(this.fitnessProperties);
+        this.testInstance = loadTestInstance(this.testFileName);
+
+        this.fitnessFunction = new RouteFunction();
+        this.fitnessFunction.setTestInstance(this.testInstance);
         this.crossover = this.strategySolver.getCrossover(this.crossoverProperties);
         this.mutation = this.strategySolver.getMutation(this.mutationProperties);
         this.selection = this.strategySolver.getSelection(this.selectionProperties);
+        this.correction = new GeneRepair();
     }
 
     /**
@@ -66,13 +97,15 @@ public class GAAlgorithm {
     public void progressAlgorithm() {
 
         //Imprime no arquivo e na tela os parametros de inicializacao do algoritmo
-        this.logging.print(this.fitnessProperties.toString());
+        this.logging.print(this.testInstance.toString());
         this.logging.print(this.crossoverProperties.toString());
         this.logging.print(this.mutationProperties.toString());
         this.logging.print(this.selectionProperties.toString());
         this.logging.print(this.executionProperties.toString());
 
         final long startTime = System.currentTimeMillis();
+
+        //Inicializa a populacao inicial aleatoriamente
         Population population = initializeRandomPopulation(this.executionProperties.getPopulationSize(), this
                 .fitnessFunction);
 
@@ -80,26 +113,31 @@ public class GAAlgorithm {
 
         boolean keepGoing = true;
         while (keepGoing) {
+            //Incrementa o contador de geracoes
             generationCount++;
+
+            //Faz o log em tela e em arquivo dos atributos de fitness dessa geracao
             this.logging.fitnessProgress( //
                     generationCount, this.executionProperties.getGenerationsToLogOnScreenInterval(), //
                     population, this.fitnessFunction);
 
+            //Evolui a populacao atual para uma nova geracao
             population = evolveGeneration(population);
 
             //Criterio de parada do algoritmo:
             switch (this.executionProperties.getStopStrategy()) {
                 case NUMBER_OF_GENERATIONS:
                     //Se for pelo numero de geracoes
-                    if (generationCount >= this.executionProperties.getMaxNumberOfGenerations()) {
+                    if (generationCount + 1 >= this.executionProperties.getMaxNumberOfGenerations()) {
                         keepGoing = false;
                     }
                     break;
                 case CONVERGENCE:
                 default:
-                    //Se for por convergencia
-                    //TODO Controlar a parada do while pela proximidade da resposta final
-                    if (population.getBest(this.fitnessFunction).getFitness(this.fitnessFunction) < 100) {
+                    //Se for por convergencia da populacao
+                    //Só calcula a cada 25 geracoes, pois eh muito custoso
+                    if (generationCount % 25 == 0 //
+                            && this.kMeansConvergence.hasConvergence(population, this.fitnessFunction)) {
                         keepGoing = false;
                     }
                     break;
@@ -109,16 +147,18 @@ public class GAAlgorithm {
 
         final long endTime = System.currentTimeMillis();
 
-        this.logging.print(""); // Imprime o melhor individuo encontrado
+        //Faz o log em tela e em arquivo dos atributos de fitness da ultima geracao
+        this.logging.fitnessProgress( //
+                generationCount + 1, this.executionProperties.getGenerationsToLogOnScreenInterval(), //
+                population, this.fitnessFunction);
+
+        this.logging.print(""); // Imprime os valores do melhor individuo encontrado
         this.logging.print("Melhor individuo da ultima geracao:");
         final Individual best = population.getBest(this.fitnessFunction);
         this.logging.print(best.toString(this.fitnessFunction));
-        this.logging.print("X:" + best.getXDoubleRepresentation(this.fitnessFunction) + ",Y:" + best
-                .getYDoubleRepresentation(this.fitnessFunction));
 
         this.logging.print(""); // Imprime o tempo total de execucao
-        this.logging.print("Tempo total de execucao (ms):");
-        this.logging.print(String.valueOf(endTime - startTime));
+        this.logging.print("Tempo total de execucao (ms): " + String.valueOf(endTime - startTime));
 
     }
 
@@ -171,7 +211,22 @@ public class GAAlgorithm {
 
         //Aplica operador de mutacao em toda a nova geracao
         newGeneration.getIndividuals().forEach( //
-                individual -> this.mutation.mutate(individual, this.mutationProperties.getEnergy()));
+                individual -> this.mutation.mutate(individual, this.mutationProperties.getEnergy(),
+                        this.fitnessFunction));
+
+        if (this.executionProperties.isUseCorrection()) {
+            // Itera populacao e aplica operador de correcao se necessario
+            newGeneration.getIndividuals().forEach( //
+                    individual -> {
+                        final SolutionValidator validator = new SolutionValidator(individual, this.fitnessFunction);
+                        // Se a solucao nao for valida, aplica o operador de correcao
+                        if (!validator.isValid()) {
+                            this.correction.correct(individual, this.fitnessFunction, //
+                                    validator.getMissingList(), validator.getErrorList());
+                        }
+                    });
+        }
+
 
         //Faz a troca da populacao de acordo com o criterio
         switch (this.executionProperties.getPopulationChangeStrategy()) {
@@ -194,13 +249,17 @@ public class GAAlgorithm {
 
     }
 
-
     private Population initializeRandomPopulation(final int size, final FitnessFunction fitnessFunction) {
         final List<Individual> individuals = new LinkedList<>();
         for (int i = 0; i < size; i++) {
-            final Individual individual = this.random.nextBinaryIndividual(fitnessFunction);
+            final Individual individual = this.random.nextRandomIndividual(fitnessFunction);
             individuals.add(individual);
         }
         return new Population(individuals);
+    }
+
+
+    private TestInstance loadTestInstance(final String testFileName) {
+        return this.testInstanceParser.parse("tests/" + testFileName + ".vrp");
     }
 }

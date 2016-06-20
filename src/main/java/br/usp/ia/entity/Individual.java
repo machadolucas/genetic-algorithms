@@ -2,18 +2,20 @@ package br.usp.ia.entity;
 
 import br.usp.ia.logic.fitness.FitnessFunction;
 
+import java.util.*;
+
 public class Individual {
 
-    private final byte[] chromosome;
+    private final Integer[] chromosome;
 
-    private Double fitness;
+    private Integer fitness;
 
     /**
      * Construtor que cria um individuo com um cromossomo
      *
      * @param chromosome
      */
-    public Individual(final byte[] chromosome) {
+    public Individual(final Integer[] chromosome) {
         this.chromosome = chromosome;
     }
 
@@ -21,7 +23,7 @@ public class Individual {
      * @param index indice
      * @return o valor do gene no indice especificado
      */
-    public byte getGene(final int index) {
+    public Integer getGene(final int index) {
         return this.chromosome[index];
     }
 
@@ -31,16 +33,20 @@ public class Individual {
      * @param index indice
      * @param value valor a ser colocado
      */
-    public void setGene(final int index, final byte value) {
+    public void setGene(final int index, final int value) {
         this.chromosome[index] = value;
         this.fitness = null;
+    }
+
+    public Integer[] getChromosome() {
+        return this.chromosome;
     }
 
     /**
      * @param fitnessFunction uma funcao fitness
      * @return o valor do fitness do individuo
      */
-    public double getFitness(final FitnessFunction fitnessFunction) {
+    public int getFitness(final FitnessFunction fitnessFunction) {
         if (this.fitness == null) {
             this.fitness = fitnessFunction.calculate(this);
         }
@@ -55,42 +61,43 @@ public class Individual {
     }
 
     /**
-     * @return a representacao binaria do cromossomo
+     * @return a representacao do cromossomo como texto (array)
      */
     public String toString(final FitnessFunction fitnessFunction) {
-        final StringBuilder chromosome = new StringBuilder();
-        for (int i = 0; i < fitnessFunction.getChromosomeLength(); i++) {
-            chromosome.append(getGene(i));
+        return Arrays.toString(this.chromosome);
+    }
+
+    public Map<Integer, List<Integer>> getObjectRepresentation(final FitnessFunction fitnessFunction) {
+        final Map<Integer, List<Integer>> objectRepresentation = new HashMap<>();
+
+        final int trucksAmount = fitnessFunction.getTestInstance().getTrucks();
+        //Inicializa as listas de caminhos por caminhoes
+        for (int i = 0; i < trucksAmount; i++) {
+            final List<Integer> path = new LinkedList<>();
+            objectRepresentation.put(i, new LinkedList<>(path));
         }
-        return chromosome.toString();
+
+        //Distribui sequencialmente os genes entre os caminhoes
+        final int geneIndex = 0;
+        for (final int geneValue : this.chromosome) {
+            objectRepresentation.get(geneIndex % trucksAmount).add(geneValue);
+        }
+
+        return objectRepresentation;
     }
 
     /**
-     * @return a representacao do valor X no cromossomo como valor decimal
+     * Calcula a distancia entre dois individuos (Pitagoras)
+     *
+     * @param other
+     * @param fitnessFunction
+     * @return
      */
-    public double getXDoubleRepresentation(final FitnessFunction fitnessFunction) {
-        //Obtem o valor inteiro a partir da representacao binaria
-        final int variableIntegerValue = Integer.parseInt(toString(fitnessFunction).substring( //
-                0, fitnessFunction.getXLength()), 2);
-
-        //Utiliza a funcao segundo Linden (2012) para converter um inteiro em decimal
-        return fitnessFunction.getLowerLimit() + variableIntegerValue * //
-                (fitnessFunction.getUpperLimit() - fitnessFunction.getLowerLimit()) / //
-                (Math.pow(2, fitnessFunction.getXLength()) - 1);
-    }
-
-    /**
-     * @return a representacao do valor Y no cromossomo como valor decimal
-     */
-    public double getYDoubleRepresentation(final FitnessFunction fitnessFunction) {
-        //Obtem o valor inteiro a partir da representacao binaria de Y
-        final int variableIntegerValue = Integer.parseInt(toString(fitnessFunction).substring( //
-                fitnessFunction.getXLength(), fitnessFunction.getXLength() + fitnessFunction.getYLength()), 2);
-
-        //Utiliza a funcao segundo Linden (2012) para converter um inteiro em decimal
-        return fitnessFunction.getLowerLimit() + variableIntegerValue * //
-                (fitnessFunction.getUpperLimit() - fitnessFunction.getLowerLimit()) / //
-                (Math.pow(2, fitnessFunction.getYLength()) - 1);
+    public double distanceTo(final Individual other, final FitnessFunction fitnessFunction) {
+        return 0; // TODO
+        // return Math.sqrt(Math.pow((other.getYDoubleRepresentation(fitnessFunction) - this.getYDoubleRepresentation
+        // (fitnessFunction)), 2) + Math.pow((other.getXDoubleRepresentation(fitnessFunction) - this
+        // .getXDoubleRepresentation(fitnessFunction)), 2));
     }
 
 }

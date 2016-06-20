@@ -20,14 +20,14 @@ public class MutationProperties {
     @Override
     public String toString() {
         return "{\"MutationProperties\":{" +
-                "\"energy\":\"" + energy +
-                "\",\"strategy\":\"" + strategy +
+                "\"energy\":\"" + this.energy +
+                "\",\"strategy\":\"" + this.strategy +
                 "\"}}";
     }
 
     @AllArgsConstructor
     public enum MutationStrategy {
-        SIMPLE("simpleMutation"), UNIFORM("uniformMutation");
+        SIMPLE("simpleMutation"), UNIFORM("uniformMutation"), EXCHANGE("exchangeMutation");
 
         @Getter
         @Setter

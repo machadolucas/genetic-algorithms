@@ -9,9 +9,13 @@ import org.springframework.stereotype.Component;
 public class CVSFileLogging implements Logging {
 
     @Override
-    public void fitnessProgress(final int generation, final int generationScreenSkip, final double populationTotal,
-                                final double populationAvg, final double max, final double min) {
-        log.info("{},{},{},{},{}", generation, populationTotal, populationAvg, max, min);
+    public void fitnessProgress(final int generation, final int generationScreenSkip, final Integer populationTotal,
+                                final double populationAvg, final Integer max, final Integer min) {
+        log.info("{}\t{}\t{}\t{}\t{}", generation, //
+                String.format("%d", populationTotal), //
+                String.format("%.3f", populationAvg), //
+                String.format("%d", max), //
+                String.format("%d", min));
     }
 
     @Override
