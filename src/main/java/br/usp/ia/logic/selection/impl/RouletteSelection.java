@@ -39,6 +39,9 @@ public class RouletteSelection implements Selection {
         final double maxFitness;
         // Obtem o valor maximo de fitness da populacao
         maxFitness = population.getMaxFitness(fitnessFunction);
+        
+        // Obtem o valor minimo de fitness da populacao        
+        final double minFitness = population.getMinFitness(fitnessFunction);
 
         // Cada posicao desse array guarda quantas vezes cada individuo foi selecionado
         final int[] selections = new int[population.size()];
@@ -56,7 +59,7 @@ public class RouletteSelection implements Selection {
                     fitness = population.getIndividuals().get(index).getFitness(fitnessFunction);
                 // Mudei de < para >= pois problema é minimizar o fitness. Isso inverte a probabilidade
                 if (this.random.getUniformGenerator().nextDouble() >=
-                        fitness / maxFitness) {
+                        fitness / maxFitness || fitness == minFitness) {
                     accepted = true;
                 }
             }
