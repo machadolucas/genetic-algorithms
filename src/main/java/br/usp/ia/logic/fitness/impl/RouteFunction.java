@@ -57,7 +57,7 @@ public class RouteFunction extends FitnessFunction {
         }
 
         // Peso para cada overcapacity
-        final int overCapacityWeight = 100000;
+        final int overCapacityWeight = 500;
 
         // Fitness eh a soma das distancias, mais o peso de overcapacity
         return totalDistances + (overCapacityWeight * overCapacities);
