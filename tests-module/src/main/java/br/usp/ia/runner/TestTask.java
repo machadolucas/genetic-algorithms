@@ -18,7 +18,7 @@ class TestTask implements Runnable {
 
         final String testName = this.testFilePath.getFileName().toString().replace(".vrp", "");
         final String[] command = {"java", "-jar", "-DtestName=" + testName, "genetic-algorithms-2.0.jar" + //
-                "--spring.config.name=params", "--spring.config.location=/"};
+                "--spring.config.name=params"};
         final ProcessBuilder processBuilder = new ProcessBuilder(command);
 
         try {
@@ -29,7 +29,7 @@ class TestTask implements Runnable {
                 final boolean exitValue = process.waitFor(120, TimeUnit.SECONDS);
                 if (!exitValue) {
                     System.out.println("java -jar -DtestName=" + testName + //
-                            " genetic-algorithms-2.0.jar --spring.config.name=params --spring.config.location=/");
+                            " genetic-algorithms-2.0.jar --spring.config.name=params");
                 }
             } catch (final InterruptedException e) {
                 e.printStackTrace();

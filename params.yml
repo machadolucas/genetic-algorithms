@@ -2,7 +2,7 @@ algorithm:
   params:
     selection:
       strategy: roulette
-      elitism: true
+      elitism: false
     crossover:
       strategy: pmx
       energy: 0.5
