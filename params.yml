@@ -2,7 +2,7 @@ algorithm:
   params:
     selection:
       strategy: roulette
-      elitism: false
+      elitism: true
     crossover:
       strategy: pmx
       energy: 0.5
@@ -11,8 +11,8 @@ algorithm:
       energy: 0.2
     execution:
       population-size: 100
-      generations-to-log-on-screen-interval: 500
+      generations-to-log-on-screen-interval: 10000
       max-number-of-generations: 100000
       stop-strategy: number_of_generations
-      population-change-strategy: complete_replacement
+      population-change-strategy: mu_plus_lambda
       use-correction: true

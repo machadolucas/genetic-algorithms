@@ -1,0 +1,18 @@
+algorithm:
+  params:
+    selection:
+      strategy: roulette
+      elitism: false
+    crossover:
+      strategy: pmx
+      energy: 0.5
+    mutation:
+      strategy: exchange
+      energy: 0.2
+    execution:
+      population-size: 100
+      generations-to-log-on-screen-interval: 500
+      max-number-of-generations: 100000
+      stop-strategy: number_of_generations
+      population-change-strategy: complete_replacement
+      use-correction: true
