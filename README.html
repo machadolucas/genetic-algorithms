@@ -19,7 +19,7 @@
 <h1><a id="user-content-trabalho-de-ia-2016" class="anchor" href="#trabalho-de-ia-2016" aria-hidden="true">
     <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
         <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path></svg>
-</a>Trabalho de IA 2016 - Parte 1</h1>
+</a>Trabalho de IA 2016 - Parte 2</h1>
 
 <p><strong>Alunos:</strong><br>
     Kathelyn Lima - NºUSP 6875115 <br>
@@ -31,9 +31,9 @@
 <div class="highlight highlight-source-shell">
 <pre>
 README.html			-> Esse arquivo.
-test.yml			-> Arquivo de entrada de exemplo com a parametrização para um teste.
-genetic-algorithms-1.0.jar	-> Pacote Java executável com os algoritmos genéticos.
-testsmodule-1.0.jar		-> Pacote Java executável para gerar e executar testes em lote.
+params.yml			-> Arquivo de entrada de exemplo com a parametrização para testes.
+genetic-algorithms-2.0.jar	-> Pacote Java executável com os algoritmos genéticos.
+testsmodule-2.0.jar		-> Pacote Java executável para executar testes em lote.
 fontes/				-> Código fonte dos algoritmos genéticos e do módulo de testes.
 ┗┳ pom.xml			-> Arquivo que configura um projeto Java "Maven" para os algoritmos genéticos.
  ┣ src/				-> Raiz de fontes do módulo dos algoritmos genéticos.
@@ -50,13 +50,13 @@ results/			-> Resultados do lote de testes executado.
 </a>Como realizar uma execução de teste:</h3>
 
 <p>Para rodar uma única instância de teste, execute o seguinte comando passando o nome do arquivo de saída desejado (<code>nomeDoTeste</code>)
-    e o caminho do arquivo de teste (<code>test.yml</code>) a ser executado:</p>
+    e o caminho do arquivo de teste (<code>params.yml</code>) a ser executado:</p>
 
 <div class="highlight highlight-source-shell">
-    <pre>java -jar -DtestName=nomeDoTeste genetic-algorithms-1.0.jar --spring.config.location=test.yml</pre>
+    <pre>java -jar -DtestName=nomeDoTeste genetic-algorithms-2.0.jar --spring.config.location=params.yml</pre>
 </div>
 
-<p>O arquivo de teste <code>test.yml</code> segue o seguinte formato, com os atributos a seguir, e identação obrigatória:</p>
+<p>O arquivo de teste <code>params.yml</code> segue o seguinte formato, com os atributos a seguir, e identação obrigatória:</p>
 
 <div class="highlight highlight-source-shell">
 <pre>algorithm:
@@ -65,19 +65,18 @@ results/			-> Resultados do lote de testes executado.
       strategy: roulette
       elitism: false/true
     crossover:
-      strategy: one_point/two_point/uniform
+      strategy: one_point/two_point/uniform/pmx
       energy: 0.8
-    fitness:
-      strategy: gold/bump/rastrigin
     mutation:
-      strategy: simple/uniform
+      strategy: simple/uniform/exchange
       energy: 0.001
     execution:
-      population-size: 40
+      population-size: 100
       generations-to-log-on-screen-interval: 25
-      max-number-of-generations: 400 #Só tem efeito se o parametro abaixo for number_of_generations
+      max-number-of-generations: 1000 #Só tem efeito se o parametro abaixo for number_of_generations
       stop-strategy: number_of_generations/convergence
       population-change-strategy: complete_replacement/mu_plus_lambda
+      use-correction: false/true #Se usa o operador de correção
 </pre>
 </div>
 
@@ -91,30 +90,19 @@ results/			-> Resultados do lote de testes executado.
 <h3><a id="user-content-como-realizar-a-execução-de-todos-os-testes-em-batch" class="anchor" href="#como-realizar-a-execução-de-todos-os-testes-em-batch" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path></svg>
 </a>Como realizar a execução de todos os testes (em batch):</h3>
 
-<p>Deve-se gerar os arquivos das instâncias de testes (se necessário), e em seguida executá-los. A execução dos testes pode demorar e acontece em paralelo
+<p>A execução dos testes pode demorar e acontece em paralelo
     usando todos os núcleos disponíveis no computador atual.</p>
-<p>Em média, cada instância de teste demora entre 150 a 1500 milissegundos para executar em um núcleo, dependendo do processador, do sistema operacional, e dos parâmetros de execução.</p>
 
 <div class="highlight highlight-source-shell">
-    <pre><span class="pl-c">#Cria os arquivos com parâmetros de testes</span>
-java -jar testsmodule-1.0.jar create
-
-<span class="pl-c">#Executa os arquivos de testes criados</span>
-java -jar testsmodule-1.0.jar run</pre></div>
+    <pre><span class="pl-c">#Executa os arquivos de testes da pasta /tests com a parametrização do params.yml</span>
+java -jar testsmodule-2.0.jar run</pre></div>
 
 <p>Será gerado como saída:</p>
 
 <ul>
-    <li>Os arquivos <code>tests/nomeDoTeste.yml</code>, com os parâmetros de execução dos testes</li>
     <li>Os arquivos <code>results/nomeDoTeste.csv</code>, com os resultados detalhados dos testes</li>
     <li>O arquivo <code>application.log</code>, com log interno da aplicação (não relevante para o estudo)</li>
 </ul>
-
-<p>O nome dos arquivos de teste gerados e executados segue a seguinte convenção:</p>
-
-<div class="highlight">
-    <pre>T-{fitness-strategy}-{elitism}-{crossover-strategy}-{crossover-energy}-{mutation-strategy}-{mutation-energy}-{population-size}-{maxNumberOfGenerations}-{stop-strategy}-{population-change-strategy}.yml</pre>
-</div>
 
 
 
@@ -127,16 +115,16 @@ java -jar testsmodule-1.0.jar run</pre></div>
 
 <div class="highlight highlight-source-shell">
     <pre><span class="pl-c1">cd</span> genetic-algoritms
-mvn compile package
+mvn package
 <span class="pl-c1">cd</span> tests-module
-mvn compile package</pre>
+mvn package</pre>
 </div>
 
-<p>Em seguida, copia-se os JARs gerados de dentro dos diretórios <code>target</code> para o diretório raiz do pacote:</p>
+<p>Em seguida, copia-se o JARs gerados de dentro dos diretórios <code>target</code> para o diretório raiz do pacote:</p>
 
 <div class="highlight highlight-source-shell">
-    <pre>cp ../target/genetic-algorithms-1.0.jar ../../genetic-algorithms-1.0.jar
-cp target/testsmodule-1.0.jar ../../testsmodule-1.0.jar</pre>
+    <pre>cp ../target/genetic-algorithms-2.0.jar ../../genetic-algorithms-2.0.jar
+cp target/testsmodule-2.0.jar ../../testsmodule-2.0.jar</pre>
 </div>
 
 
